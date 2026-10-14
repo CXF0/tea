@@ -1,0 +1,11 @@
+{
+  "name": "梦花仓管 · SQLite 全栈演示",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:24-bookworm",
+  "forwardPorts": [3101],
+  "portsAttributes": {
+    "3101": { "label": "梦花仓管全栈演示", "onAutoForward": "openBrowser" }
+  },
+  "postCreateCommand": "npm ci --registry=https://registry.npmjs.org && npm run typecheck && npm run build && npm run db:init",
+  "postStartCommand": "bash scripts/start-codespaces-demo.sh",
+  "remoteUser": "node"
+}

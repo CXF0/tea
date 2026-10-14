@@ -1,0 +1,650 @@
+{
+  "pages": [
+    {
+      "path": "pages/login/index",
+      "style": { "navigationStyle": "custom", "navigationBarTitleText": "登录" }
+    },
+    {
+      "path": "pages/scan/index",
+      "style": { "navigationBarTitleText": "扫码作业", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black" }
+    },
+    {
+      "path": "workbenches/home/index",
+      "style": {
+        "navigationBarTitleText": "工作台",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "workbenches/home/shortcut-settings",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "快捷作业设置"
+      }
+    },
+    {
+      "path": "pages/data-center/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "数据中心",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/data-center/category-sort",
+      "style": {
+        "navigationBarTitleText": "调整分类顺序",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/data-center/card-sort",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "卡片排序"
+      }
+    },
+    {
+      "path": "pages/data-center/quality-issues",
+      "style": {
+        "navigationBarTitleText": "待处理质检问题",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/data-center/distribution-detail",
+      "style": {
+        "navigationBarTitleText": "分区配货详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/data-center/site-locations",
+      "style": {
+        "navigationBarTitleText": "场地货位明细",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/messages/index",
+      "style": {
+        "navigationBarTitleText": "消息中心",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/mine/punishments",
+      "style": {
+        "navigationBarTitleText": "我的处罚",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "pages/mine/index",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "workbenches/quality/index",
+      "style": {
+        "navigationBarTitleText": "质检工作台",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/quality/pages/tasks/index",
+      "style": {
+        "navigationBarTitleText": "质检任务",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/quality/pages/suppliers/index",
+      "style": {
+        "navigationBarTitleText": "花材质检",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/quality/pages/supplier-detail/index",
+      "style": {
+        "navigationBarTitleText": "供应商质检",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/quality/pages/shelf-inspection/index",
+      "style": {
+        "navigationBarTitleText": "货架花材质检",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/quality/pages/operation-log/index",
+      "style": {
+        "navigationBarTitleText": "操作日志",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/quality/pages/task-detail/index",
+      "style": {
+        "navigationBarTitleText": "质检详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/quality/pages/video-submit/index",
+      "style": {
+        "navigationBarTitleText": "拍摄好花视频",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/quality/pages/statistics/index",
+      "style": {
+        "navigationBarTitleText": "分区质检详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/quality/pages/base-statistics/index",
+      "style": {
+        "navigationBarTitleText": "基地质检统计",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/quality/pages/exchange-records/index",
+      "style": {
+        "navigationBarTitleText": "换货记录",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/arrival-goods/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "到场货管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/arrival-goods/pages/purchase/index",
+      "style": {
+        "navigationBarTitleText": "收购管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/arrival-goods/pages/stock/index",
+      "style": {
+        "navigationBarTitleText": "库存列表",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/arrival-goods/pages/outbound/index",
+      "style": {
+        "navigationBarTitleText": "商品出库",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/arrival-goods/pages/self-pickup/index",
+      "style": {
+        "navigationBarTitleText": "场地自提",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/arrival-goods/pages/unlabeled/index",
+      "style": {
+        "navigationBarTitleText": "无标签花材",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/distribution/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "配货大厅",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/distribution/pages/shelf-detail/index",
+      "style": {
+        "navigationBarTitleText": "货架配货",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/distribution/pages/unfinished-summary/index",
+      "style": {
+        "navigationBarTitleText": "未配货汇总",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/distribution/pages/my-allocations/index",
+      "style": {
+        "navigationBarTitleText": "我的配货",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/restock/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "补货管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/packing/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "打包大厅",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/packing/pages/task-detail/index",
+      "style": {
+        "navigationBarTitleText": "货架打包",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/packing/pages/my-packages/index",
+      "style": {
+        "navigationBarTitleText": "我的打包",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/packing/pages/statistics/index",
+      "style": {
+        "navigationBarTitleText": "业务数据统计",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/logistics/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "物流发货",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/logistics/pages/pickup-progress/index",
+      "style": {
+        "navigationBarTitleText": "揽收汇总",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/transport/pages/dispatch/index",
+      "style": {
+        "navigationBarTitleText": "派车任务",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/transport/pages/vehicles/index",
+      "style": {
+        "navigationBarTitleText": "车辆管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/transport/pages/base-flowers/index",
+      "style": {
+        "navigationBarTitleText": "基地花材明细",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/logistics/pages/shelf-detail/index",
+      "style": {
+        "navigationBarTitleText": "货架发货详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/logistics/pages/outbound-records/index",
+      "style": {
+        "navigationBarTitleText": "我的物流出库记录",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/part-logistics/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "兼职物流员管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/restock/pages/submit/index",
+      "style": {
+        "navigationBarTitleText": "我要补货",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/restock/pages/history/index",
+      "style": {
+        "navigationBarTitleText": "历史补货单",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/cold-storage/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "冷库暂存",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/cold-storage/pages/bare-register/index",
+      "style": {
+        "navigationBarTitleText": "裸花暂存登记",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/admission/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "入场管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/management/pages/staff/index",
+      "style": {
+        "navigationBarTitleText": "人员管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "features/workforce/pages/distribution-staff/index",
+      "style": {
+        "navigationBarTitleText": "配货权限",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/workforce/pages/inspection-attendance/index",
+      "style": {
+        "navigationBarTitleText": "质检假勤",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-management/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "基地管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-stocktaking/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "基地盘点",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-outsource-income/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "基地包干收益",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-return/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "基地退货",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/agri-material/pages/home/index",
+      "style": {
+        "navigationBarTitleText": "农资管理",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/agri-material/pages/detail/index",
+      "style": {
+        "navigationBarTitleText": "农资订单详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/agri-driver/pages/delivery/index",
+      "style": { "navigationBarTitleText": "农资送货单", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/agri-driver/pages/delivery/detail",
+      "style": { "navigationBarTitleText": "送货商品明细", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/agri-driver/pages/orders/index",
+      "style": { "navigationBarTitleText": "农资订单", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/agri-driver/pages/orders/detail",
+      "style": { "navigationBarTitleText": "农资订单详情", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/carton-inventory/pages/home/index",
+      "style": { "navigationBarTitleText": "纸箱管理", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/patrol-punishment/pages/home/index",
+      "style": { "navigationBarTitleText": "巡线处罚", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/bulk-purchase/pages/demands/index",
+      "style": { "navigationBarTitleText": "集采需求", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/bulk-purchase/pages/demands/detail",
+      "style": { "navigationBarTitleText": "集采需求详情", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black" }
+    },
+    {
+      "path": "features/bulk-purchase/pages/orders/index",
+      "style": { "navigationBarTitleText": "集采订单", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/system-account/pages/home/index",
+      "style": { "navigationBarTitleText": "系统账户", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/access-control/pages/home/index",
+      "style": { "navigationBarTitleText": "角色权限", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/carton-inventory/pages/applications/index",
+      "style": { "navigationBarTitleText": "申领审核", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/carton-inventory/pages/ledger/index",
+      "style": { "navigationBarTitleText": "出入库管理", "navigationBarBackgroundColor": "#ffffff", "navigationBarTextStyle": "black", "enablePullDownRefresh": true }
+    },
+    {
+      "path": "features/distribution-team/pages/accounts/index",
+      "style": {
+        "navigationBarTitleText": "团队账号",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/distribution-team/pages/statistics/index",
+      "style": {
+        "navigationBarTitleText": "配货明细",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-return/pages/scan/index",
+      "style": {
+        "navigationStyle": "custom",
+        "navigationBarTitleText": "退货二次确认",
+        "disableScroll": true
+      }
+    },
+    {
+      "path": "features/base-stocktaking/pages/detail/index",
+      "style": {
+        "navigationBarTitleText": "盘点详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-management/pages/detail/index",
+      "style": {
+        "navigationBarTitleText": "基地详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-management/pages/supplier-stock/index",
+      "style": {
+        "navigationBarTitleText": "供应商库存详情",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black",
+        "enablePullDownRefresh": true
+      }
+    },
+    {
+      "path": "features/base-management/pages/label-print/index",
+      "style": {
+        "navigationBarTitleText": "帮打标签",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    },
+    {
+      "path": "pages/home/index",
+      "style": {
+        "navigationBarTitleText": "梦花仓管",
+        "navigationBarBackgroundColor": "#ffffff",
+        "navigationBarTextStyle": "black"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f3f7f6"
+  }
+}

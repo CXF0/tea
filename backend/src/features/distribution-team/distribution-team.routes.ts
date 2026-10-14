@@ -1,0 +1,20 @@
+import type { FastifyPluginAsync } from 'fastify'
+import { AppError } from '../../shared/errors.js'
+import { readToken } from '../auth/auth.service.js'
+import * as repo from './distribution-team.repository.js'
+
+async function auth(headers:Record<string,unknown>,capability:string){const token=String(headers.authorization||'').replace(/^Bearer /,'');const id=readToken(token);if(!id)throw new AppError(401,'AUTH_REQUIRED','登录已失效');if(!await repo.hasCapability(id,capability))throw new AppError(403,'CAPABILITY_REQUIRED','当前账号无权使用该功能');const team=await repo.context(id);return{id,team}}
+const requiredTeam=(team:any)=>{if(!team)throw new AppError(403,'TEAM_REQUIRED','当前未配置有效的外包配货团队');return team}
+const accountInput=(body:any)=>{const input={loginName:String(body.loginName||'').trim(),name:String(body.name||'').trim(),phone:String(body.phone||'').trim()};if(!input.loginName||!input.name||!/^1\d{10}$/.test(input.phone))throw new AppError(400,'INVALID_ACCOUNT','请完整填写账号、姓名和正确手机号');return input}
+
+export const distributionTeamRoutes:FastifyPluginAsync=async app=>{
+  app.get('/context',async request=>{const user=await auth(request.headers,'teamAccount.view');return{data:user.team?{configured:true,teamId:Number(user.team.team_id),teamName:String(user.team.team_name)}:{configured:false}}})
+  app.get('/accounts',async request=>{const user=await auth(request.headers,'teamAccount.view');if(!user.team)return{data:{configured:false,list:[]}};const q=request.query as any;return{data:{configured:true,teamName:user.team.team_name,list:await repo.accounts(Number(user.team.leader_source_id),String(q.keyword||''),Number(q.status)===0?0:1)}}})
+  app.get('/account-candidates',async request=>{await auth(request.headers,'teamAccount.manage');return{data:await repo.candidates(String((request.query as any).keyword||''))}})
+  app.post('/accounts/bind',async request=>{const user=await auth(request.headers,'teamAccount.manage');try{return{data:{updated:await repo.bindAccount(requiredTeam(user.team),Number((request.body as any).accountId),user.id)}}}catch(e:any){if(e.message==='ACCOUNT_BOUND')throw new AppError(409,'ACCOUNT_BOUND','该账号已关联其他团队');throw e}})
+  app.post('/accounts',async request=>{const user=await auth(request.headers,'teamAccount.manage');try{return{data:{id:await repo.createAccount(requiredTeam(user.team),accountInput(request.body),user.id),initialPassword:'123456'}}}catch(e:any){if(e?.code==='ER_DUP_ENTRY')throw new AppError(409,'ACCOUNT_EXISTS','登录账号或手机号已存在');throw e}})
+  app.put('/accounts/:id',async request=>{const user=await auth(request.headers,'teamAccount.manage');const updated=await repo.updateAccount(Number(requiredTeam(user.team).leader_source_id),Number((request.params as any).id),accountInput(request.body));if(!updated)throw new AppError(404,'ACCOUNT_NOT_FOUND','未找到团队账号');return{data:{updated}}})
+  app.put('/accounts/:id/status',async request=>{const user=await auth(request.headers,'teamAccount.manage');const status=Number((request.body as any).status);if(![0,1].includes(status))throw new AppError(400,'INVALID_STATUS','账号状态无效');return{data:{updated:await repo.setStatus(Number(requiredTeam(user.team).leader_source_id),Number((request.params as any).id),status)}}})
+  app.post('/accounts/:id/reset-password',async request=>{const user=await auth(request.headers,'teamAccount.manage');return{data:{updated:await repo.resetPassword(Number(requiredTeam(user.team).leader_source_id),Number((request.params as any).id)),initialPassword:'123456'}}})
+  app.get('/statistics',async request=>{const user=await auth(request.headers,'teamDistribution.view');if(!user.team)return{data:{configured:false,list:[]}};const q=request.query as any;const type=q.type==='month'?'month':'session';const period=String(q.period||new Date().toISOString().slice(0,type==='month'?7:10));const rows=await repo.statistics(Number(user.team.leader_source_id),String(q.keyword||''),type,period);const list=await Promise.all(rows.map(async(row:any)=>({...row,zoneList:await repo.statisticZones(Number(row.source_user_id),type,period)})));return{data:{configured:true,teamName:user.team.team_name,list}}})
+}

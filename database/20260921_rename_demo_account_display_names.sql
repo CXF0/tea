@@ -1,0 +1,14 @@
+UPDATE wms_account SET display_name='周明远' WHERE login_name='demo_qualityInspector';
+UPDATE wms_account SET display_name='韩雪梅' WHERE login_name='demo_qualityLeader';
+UPDATE wms_account SET display_name='罗建国' WHERE login_name='demo_baseAdmissionOfficer';
+UPDATE wms_account SET display_name='蒋文斌' WHERE login_name='demo_warehouseManager';
+UPDATE wms_account SET display_name='陈志强' WHERE login_name='demo_siteAdmin';
+UPDATE wms_account SET display_name='刘海峰' WHERE login_name='demo_regionalManager';
+UPDATE wms_account SET display_name='何建华' WHERE login_name='demo_zoneSupervisor';
+UPDATE wms_account SET display_name='郑晓东' WHERE login_name='demo_patrolInspector';
+UPDATE wms_account SET display_name='杨晨' WHERE login_name='demo_picker';
+UPDATE wms_account SET display_name='李建军' WHERE login_name='demo_packer';
+UPDATE wms_account SET display_name='徐博文' WHERE login_name='demo_logisticsSpecialist';
+UPDATE wms_account SET display_name='马俊' WHERE login_name='demo_driver';
+UPDATE wms_account SET display_name='高志鹏' WHERE login_name='demo_baseRegionLeader';
+UPDATE wms_account SET display_name='赵春梅' WHERE login_name='demo_baseStationStaff';

@@ -1,0 +1,28 @@
+{
+  "name": "menghuacangguan-v1",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "concurrently -n app,api -c cyan,green \"npm run dev:h5 -w frontend\" \"npm run dev -w backend\"",
+    "dev:h5": "npm run dev:h5 -w frontend",
+    "dev:mp-weixin": "npm run dev:mp-weixin -w frontend",
+    "dev:backend": "npm run dev -w backend",
+    "build": "npm run build:h5 -w frontend && npm run build -w backend",
+    "typecheck": "npm run typecheck -w frontend && npm run typecheck -w backend",
+    "seed:range": "npm run seed:range -w backend --",
+    "start": "npm run start -w backend",
+    "db:init": "npm run db:init -w backend",
+    "demo": "npm run db:init && npm start",
+    "test": "npm run build -w backend && node --test backend/tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "concurrently": "latest"
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  }
+}

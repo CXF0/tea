@@ -1,0 +1,19 @@
+import type { FastifyPluginAsync } from 'fastify'
+import { createWriteStream } from 'node:fs';import { mkdir } from 'node:fs/promises';import { extname,resolve } from 'node:path';import { randomUUID } from 'node:crypto';import { pipeline } from 'node:stream/promises'
+import { readToken } from '../auth/auth.service.js';import { AppError } from '../../shared/errors.js';import * as repository from './packing.repository.js';import * as service from './packing.service.js'
+async function auth(headers:Record<string,unknown>,capability:string){const a=String(headers.authorization||'');const userId=readToken(a.startsWith('Bearer ')?a.slice(7):'');if(!userId)throw new AppError(401,'AUTH_REQUIRED','登录已失效');if(!await repository.hasCapability(userId,capability))throw new AppError(403,'CAPABILITY_REQUIRED','当前账号无权使用该功能');return{userId,userName:decodeURIComponent(String(headers['x-user-name']||''))}}
+export const packingRoutes:FastifyPluginAsync=async app=>{
+ app.get('/shelves',async req=>{await auth(req.headers,'packing.view');const q=req.query as Record<string,string>;return{data:await service.shelves(q.date||new Date().toISOString().slice(0,10),Number(q.status||0),q.keyword||'',q.restock==='1',q.early==='1',q.zone||'',Number(q.boxMatch||0),q.deliveryStart||'',q.deliveryEnd||'')}})
+ app.get('/zones',async req=>{await auth(req.headers,'packing.view');return{data:await service.zones(String((req.query as any).date||''))}})
+ app.get('/shelves/:shelfSn',async req=>{await auth(req.headers,'packing.view');const q=req.query as {date:string};return{data:await service.detail(q.date,Number((req.params as any).shelfSn))}})
+ app.get('/box-types',async req=>{await auth(req.headers,'packing.operate');return{data:await service.boxTypes()}})
+ app.post('/media',async req=>{await auth(req.headers,'packing.operate');const file=await req.file();if(!file)throw new AppError(400,'IMAGE_REQUIRED','请选择照片');if(!new Set(['image/jpeg','image/png','image/webp']).has(file.mimetype))throw new AppError(400,'UNSUPPORTED_IMAGE','仅支持 JPG、PNG 和 WebP 图片');const dir=resolve(process.cwd(),'uploads','packing');await mkdir(dir,{recursive:true});const name=`${Date.now()}-${randomUUID()}${extname(file.filename).toLowerCase()||'.jpg'}`;await pipeline(file.file,createWriteStream(resolve(dir,name)));return{data:{url:`/uploads/packing/${name}`}}})
+ app.post('/packages/:id/complete',async req=>{const u=await auth(req.headers,'packing.operate');const b=req.body as any;return{data:await service.complete(Number((req.params as any).id),Number(b.boxId),String(b.boxName||''),b.photos||[],u.userId,u.userName)}})
+ app.get('/mine',async req=>{const u=await auth(req.headers,'packing.view');return{data:await service.mine(String((req.query as any).date||''),u.userId)}})
+ app.get('/statistics',async req=>{await auth(req.headers,'packing.view');return{data:await service.statistics(String((req.query as any).date||''))}})
+ app.get('/statistics/packaging',async req=>{await auth(req.headers,'packing.statistics.packaging');return{data:await service.packagingStatistics(String((req.query as any).date||''))}})
+ app.get('/statistics/zone-weight',async req=>{await auth(req.headers,'packing.statistics.zoneWeight');const q=req.query as any;return{data:await service.zoneWeightStatistics(String(q.startDate||''),String(q.endDate||''))}})
+ app.get('/statistics/income',async req=>{await auth(req.headers,'packing.statistics.income');const q=req.query as any;return{data:await service.incomeStatistics(String(q.date||''),String(q.name||''),Number(q.type||0))}})
+ app.get('/statistics/cotton',async req=>{await auth(req.headers,'packing.statistics.cotton');const q=req.query as any;return{data:await service.cottonStatistics(String(q.date||''),String(q.zone||''))}})
+ app.get('/statistics/sizes',async req=>{await auth(req.headers,'packing.view');return{data:await service.sizeStatistics(String((req.query as any).date||''))}})
+}

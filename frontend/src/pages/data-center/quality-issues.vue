@@ -1,0 +1,10 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import WareState from '@/shared/components/WareState.vue'
+const loading=ref(true),date=ref(''),zone=ref('全部分区')
+const issues=ref([{id:'Q-0921-018',shelf:'01-126',supplier:'斗南基地 · 沐橙花艺',product:'高原红 B级',problem:'花头损伤',count:3,status:'待复核'},{id:'Q-0921-024',shelf:'03-088',supplier:'红塔基地 · 云南鲜花',product:'粉雪山 C级',problem:'成熟度不符',count:2,status:'待处理'}])
+onLoad((q)=>{date.value=String(q?.date||'');zone.value=decodeURIComponent(String(q?.zone||'全部分区'));setTimeout(()=>loading.value=false,180)})
+</script>
+<template><view class="page"><view class="scope"><b>{{date}} 场次</b><text>{{zone}}</text></view><WareState v-if="loading" type="loading" title="正在加载问题"/><WareState v-else-if="!issues.length" type="empty" title="暂无待处理问题" description="当前筛选范围内没有待处理质检问题"/><view v-else class="list"><view v-for="x in issues" :key="x.id" class="issue"><view class="head"><b>{{x.shelf}}</b><span>{{x.status}}</span></view><text>{{x.supplier}}</text><view class="main"><b>{{x.product}}</b><strong>{{x.problem}} · {{x.count}} 扎</strong></view><small>问题编号 {{x.id}}</small></view></view></view></template>
+<style scoped>.page{min-height:100vh;padding:20rpx 24rpx;background:var(--wms-surface-page)}.scope{display:flex;align-items:center;justify-content:space-between;padding:16rpx 20rpx;border:1rpx solid var(--wms-border);border-radius:9rpx;background:#fff}.scope b{font-size:24rpx}.scope text{color:var(--wms-primary-700);font-size:22rpx}.list{margin-top:14rpx}.issue{margin-bottom:12rpx;padding:20rpx;border:1rpx solid var(--wms-border);border-radius:11rpx;background:#fff}.head,.main{display:flex;align-items:center;justify-content:space-between}.head b{font-size:29rpx}.head span{padding:4rpx 10rpx;border-radius:5rpx;background:var(--wms-surface-soft);color:var(--wms-primary-700);font-size:20rpx}.issue>text,.issue small{display:block;margin-top:8rpx;color:var(--wms-text-secondary);font-size:21rpx}.main{margin-top:14rpx}.main b{font-size:25rpx}.main strong{color:var(--wms-danger);font-size:22rpx}</style>

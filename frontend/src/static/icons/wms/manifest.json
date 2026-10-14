@@ -1,0 +1,575 @@
+{
+  "style_version": "2.0.0",
+  "family": "outline",
+  "status": "candidate",
+  "icons": [
+    {
+      "id": "fwms-collection-outline",
+      "label": "集货",
+      "category": "collection",
+      "file": "fwms-collection-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-truck-outline",
+      "label": "运输",
+      "category": "transport",
+      "file": "fwms-truck-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-checkin-outline",
+      "label": "到场",
+      "category": "transport",
+      "file": "fwms-checkin-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-inspection-outline",
+      "label": "花材质检",
+      "category": "inspection",
+      "file": "fwms-inspection-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-flower-bunch-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-warehouse-outline",
+      "label": "仓库",
+      "category": "warehouse",
+      "file": "fwms-warehouse-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-inbound-outline",
+      "label": "入库",
+      "category": "warehouse",
+      "file": "fwms-inbound-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-outbound-outline",
+      "label": "物流发货",
+      "category": "dispatch",
+      "file": "fwms-outbound-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-truck-outline",
+        "fwms-dispatch-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-shelf-outline",
+      "label": "货架",
+      "category": "inventory",
+      "file": "fwms-shelf-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-location-outline",
+      "label": "货位",
+      "category": "inventory",
+      "file": "fwms-location-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-picking-outline",
+      "label": "配货/拣货",
+      "category": "picking",
+      "file": "fwms-picking-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-flower-bunch-outline",
+      "label": "花束",
+      "category": "flower",
+      "file": "fwms-flower-bunch-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-packing-outline",
+      "label": "打包",
+      "category": "packing",
+      "file": "fwms-packing-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-parcel-outline",
+      "label": "包裹",
+      "category": "packing",
+      "file": "fwms-parcel-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-dispatch-outline",
+      "label": "发货",
+      "category": "dispatch",
+      "file": "fwms-dispatch-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-scan-outline",
+      "label": "扫码",
+      "category": "utility",
+      "file": "fwms-scan-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-sort-outline",
+      "label": "自定义排序",
+      "category": "utility",
+      "file": "fwms-sort-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-settings-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-stocktake-outline",
+      "label": "基地盘点",
+      "category": "inventory",
+      "file": "fwms-stocktake-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-task-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-replenishment-outline",
+      "label": "补货",
+      "category": "inventory",
+      "file": "fwms-replenishment-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-return-outline",
+      "label": "退货",
+      "category": "exception",
+      "file": "fwms-return-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-base-return-outline",
+      "label": "基地退货",
+      "aliases": [
+        "退货二次确认"
+      ],
+      "category": "exception",
+      "file": "fwms-base-return-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-warehouse-outline",
+        "fwms-return-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-cold-storage-outline",
+      "label": "冷库暂存",
+      "category": "storage",
+      "file": "fwms-cold-storage-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-parcel-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-crate-outline",
+      "label": "周转筐",
+      "category": "container",
+      "file": "fwms-crate-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-workbench-outline",
+      "label": "工作台",
+      "category": "navigation",
+      "file": "fwms-workbench-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-task-outline",
+      "label": "任务",
+      "category": "navigation",
+      "file": "fwms-task-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-message-outline",
+      "label": "消息",
+      "category": "navigation",
+      "file": "fwms-message-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-account-outline",
+      "label": "我的",
+      "category": "navigation",
+      "file": "fwms-account-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "aliases": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending"
+    },
+    {
+      "id": "fwms-system-account-outline",
+      "label": "系统账户",
+      "category": "management",
+      "file": "fwms-system-account-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-account-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-distribution-permission-outline",
+      "label": "配货权限",
+      "category": "workforce",
+      "file": "fwms-distribution-permission-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-account-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-inspection-attendance-outline",
+      "label": "质检假勤",
+      "category": "workforce",
+      "file": "fwms-inspection-attendance-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-account-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-part-logistics-outline",
+      "label": "兼职物流",
+      "category": "logistics",
+      "file": "fwms-part-logistics-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-account-outline",
+        "fwms-inspection-attendance-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-warehouse-income-outline",
+      "label": "基地包干收益",
+      "category": "management",
+      "file": "fwms-warehouse-income-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-inventory-outline",
+      "label": "库存",
+      "category": "inventory",
+      "file": "fwms-inventory-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-crate-outline",
+        "fwms-parcel-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-team-account-outline",
+      "label": "团队账号",
+      "category": "workforce",
+      "file": "fwms-team-account-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-account-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-team-picking-outline",
+      "label": "配货明细",
+      "category": "picking",
+      "file": "fwms-team-picking-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-account-outline",
+        "fwms-picking-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-patrol-punishment-outline",
+      "label": "巡线处罚",
+      "category": "exception",
+      "file": "fwms-patrol-punishment-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-task-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-access-control-outline",
+      "label": "角色权限",
+      "category": "management",
+      "file": "fwms-access-control-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-account-outline",
+        "fwms-distribution-permission-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-bulk-demand-outline",
+      "label": "集采需求",
+      "category": "procurement",
+      "file": "fwms-bulk-demand-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-task-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-bulk-order-outline",
+      "label": "集采订单",
+      "category": "procurement",
+      "file": "fwms-bulk-order-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-task-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-agri-delivery-outline",
+      "label": "农资送货单",
+      "category": "dispatch",
+      "file": "fwms-agri-delivery-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-dispatch-outline",
+        "fwms-task-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    },
+    {
+      "id": "fwms-agri-order-outline",
+      "label": "农资订单",
+      "category": "procurement",
+      "file": "fwms-agri-order-outline.svg",
+      "status": "candidate",
+      "icon_version": "2.0.0",
+      "reference_ids": [
+        "fwms-task-outline",
+        "fwms-bulk-order-outline"
+      ],
+      "optical_adjustments": "24px 线性候选图标，用于无图片源码包的云端演示",
+      "source": "cloud-demo-restoration",
+      "approval_record": "pending",
+      "aliases": []
+    }
+  ]
+}

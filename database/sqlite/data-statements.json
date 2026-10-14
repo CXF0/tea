@@ -1,0 +1,1450 @@
+[
+  {
+    "file": "001_quality_demo.sql",
+    "sql": "INSERT INTO `xm_inspection_reason_config`\n  (`parent_id`, `reason_name`, `level`, `sequence`, `create_user_id`, `create_user_name`, `update_user_id`, `update_user_name`)\nSELECT seed.parent_id, seed.reason_name, seed.level, seed.sequence, 0, '系统种子', 0, '系统种子'\nFROM (\n  SELECT 0 AS parent_id, '花材品质' AS reason_name, 1 AS level, 10 AS sequence\n  UNION ALL SELECT 0, '包装与数量', 1, 20\n  UNION ALL SELECT 0, '运输损伤', 1, 30\n) seed\nWHERE NOT EXISTS (SELECT 1 FROM `xm_inspection_reason_config` LIMIT 1)"
+  },
+  {
+    "file": "001_quality_demo.sql",
+    "sql": "INSERT INTO `xm_inspection_reason_config`\n  (`parent_id`, `reason_name`, `level`, `sequence`, `create_user_id`, `create_user_name`, `update_user_id`, `update_user_name`)\nSELECT parent.id, child.reason_name, 2, child.sequence, 0, '系统种子', 0, '系统种子'\nFROM (\n  SELECT '花材品质' AS parent_name, '花头损伤' AS reason_name, 10 AS sequence\n  UNION ALL SELECT '花材品质', '开放度不符', 20\n  UNION ALL SELECT '花材品质', '病虫害或腐烂', 30\n  UNION ALL SELECT '包装与数量', '扎数不足', 10\n  UNION ALL SELECT '包装与数量', '规格混装', 20\n  UNION ALL SELECT '运输损伤', '挤压折断', 10\n  UNION ALL SELECT '运输损伤', '失水萎蔫', 20\n) child\nJOIN `xm_inspection_reason_config` parent\n  ON parent.parent_id = 0 AND parent.level = 1 AND parent.reason_name = child.parent_name\nWHERE NOT EXISTS (SELECT 1 FROM `xm_inspection_reason_config` WHERE level = 2 LIMIT 1)"
+  },
+  {
+    "file": "001_quality_demo.sql",
+    "sql": "INSERT INTO `xm_bulky_inspection`\n  (`date`, `enter_item_id`, `shelf_sn`, `zoen_shelf`, `sub_shelf_sn`, `product_id`, `product_name`,\n   `rank_num`, `sku_config`, `item_num`, `receive_tel`, `supplier_id`, `supplier_name`,\n   `inspection_flag`, `focus_flag`, `status`, `assigned_user_id`, `assigned_user_name`, `remark`)\nSELECT seed.date, seed.enter_item_id, seed.shelf_sn, seed.zoen_shelf, seed.sub_shelf_sn, seed.product_id,\n       seed.product_name, seed.rank_num, seed.sku_config, seed.item_num, '', seed.supplier_id,\n       seed.supplier_name, seed.inspection_flag, seed.focus_flag, 0, 1001, '李师傅', ''\nFROM (\n  SELECT '2026-09-17' AS date, 91001 AS enter_item_id, 7 AS shelf_sn, '07-001' AS zoen_shelf, '001' AS sub_shelf_sn, 501 AS product_id, '红玫瑰' AS product_name, 2 AS rank_num, '60cm / 20枝' AS sku_config, 42 AS item_num, 201 AS supplier_id, '晋宁花语基地' AS supplier_name, 1 AS inspection_flag, 1 AS focus_flag\n  UNION ALL SELECT '2026-09-17', 91002, 7, '07-002', '002', 502, '香槟玫瑰', 1, '70cm / 20枝', 36, 202, '呈贡繁花合作社', 0, 0\n  UNION ALL SELECT '2026-09-17', 91003, 8, '08-003', '003', 503, '白色洋桔梗', 1, '60cm / 10枝', 28, 203, '斗南云花供应商', 1, 0\n  UNION ALL SELECT '2026-09-17', 91004, 9, '09-001', '001', 504, '向日葵', 2, '单头 / 10枝', 24, 204, '嵩明阳光花田', 0, 0\n  UNION ALL SELECT '2026-09-17', 91005, 10, '10-006', '006', 505, '粉色康乃馨', 1, '60cm / 20枝', 50, 205, '宜良春城花卉', 0, 1\n  UNION ALL SELECT '2026-09-17', 91006, 11, '11-002', '002', 506, '蓝色绣球', 1, 'A级 / 5枝', 18, 206, '安宁青山园艺', 1, 1\n  UNION ALL SELECT '2026-09-17', 91007, 12, '12-004', '004', 507, '多头百合', 2, '3头 / 10枝', 32, 207, '石林百合基地', 0, 0\n  UNION ALL SELECT '2026-09-17', 91008, 13, '13-005', '005', 508, '紫色勿忘我', 3, '自然束 / 1kg', 16, 208, '斗南拾花供应商', 0, 0\n) seed\nWHERE NOT EXISTS (SELECT 1 FROM `xm_bulky_inspection` LIMIT 1)"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "INSERT INTO xm_bulky_supplier_enter\n  (type, supplier_id, supplier_name, login_tel, date, operator_id, enter_time,\n   data_status, is_qualify, is_late, quality_inspection_flag, create_time, update_time)\nSELECT seed.type, seed.supplier_id, seed.supplier_name, seed.login_tel, seed.date, 0,\n       seed.enter_time, seed.data_status, seed.is_qualify, seed.is_late,\n       seed.quality_inspection_flag, NOW(), NOW()\nFROM (\n  SELECT 4 type, 301 supplier_id, '晋宁云花基地' supplier_name, '13800001001' login_tel, '2026-09-17' date, '' enter_time, 0 data_status, 0 is_qualify, 0 is_late, 1 quality_inspection_flag\n  UNION ALL SELECT 4, 302, '呈贡四季花场', '13800001002', '2026-09-17', '08:42:00', 1, 0, 0, 0\n  UNION ALL SELECT 4, 303, '嵩明晨露合作社', '13800001003', '2026-09-17', '', 0, 1, 1, 0\n) seed\nWHERE NOT EXISTS (SELECT 1 FROM xm_bulky_supplier_enter existing WHERE existing.date = '2026-09-17')"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "INSERT INTO xm_bulky_supplier_enter_item\n  (enter_id, ware_id, order_num, sub_shelf_sn, zone, shelf, zone_shelf, date,\n   supplier_id, product_id, product_name, rank_num, sku_config, item_num,\n   is_position, is_qualify, not_qualify_num, create_time, update_time, data_status)\nSELECT entry.id, 1, seed.order_num, seed.sub_shelf_sn, seed.zone, seed.shelf,\n       seed.zone_shelf, entry.date, entry.supplier_id, seed.product_id,\n       seed.product_name, seed.rank_num, seed.sku_config, seed.item_num,\n       1, seed.is_qualify, seed.not_qualify_num, NOW(), NOW(), 0\nFROM xm_bulky_supplier_enter entry\nJOIN (\n  SELECT 301 supplier_id, 11209 order_num, '3' sub_shelf_sn, '11' zone, '209' shelf, '11-209-3' zone_shelf, 701 product_id, '高原红' product_name, 1 rank_num, '成熟度:中熟,规格:20枝/扎' sku_config, 12 item_num, 0 is_qualify, 0 not_qualify_num\n  UNION ALL SELECT 301, 22001, '1', '22', '001', '22-001-1', 702, '雪山玫瑰', 1, '成熟度:中熟,规格:20枝/扎', 8, 1, 0\n  UNION ALL SELECT 302, 70301, '1', '07', '301', '07-301-1', 703, '卡罗拉', 2, '成熟度:偏生,规格:20枝/扎', 16, 0, 0\n  UNION ALL SELECT 302, 70302, '2', '07', '302', '07-302-2', 704, '戴安娜', 1, '成熟度:中熟,规格:20枝/扎', 10, 1, 0\n  UNION ALL SELECT 303, 90408, '1', '09', '408', '09-408-1', 705, '向日葵', 1, '成熟度:中熟,规格:10枝/扎', 20, 10, 3\n  UNION ALL SELECT 303, 90409, '2', '09', '409', '09-409-2', 706, '洋桔梗', 2, '成熟度:偏熟,规格:20枝/扎', 14, 0, 0\n) seed ON seed.supplier_id = entry.supplier_id\nWHERE entry.date = '2026-09-17'\n  AND NOT EXISTS (\n    SELECT 1 FROM xm_bulky_supplier_enter_item existing\n     WHERE existing.enter_id = entry.id AND existing.order_num = seed.order_num\n       AND existing.sub_shelf_sn = seed.sub_shelf_sn AND existing.data_status = 0\n  )"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "INSERT INTO partner (name, app_id, contact_name, contact_tel, status)\nSELECT '繁花测试门店', 'demo-wms-quality-partner', '测试联系人', '13900002000', 1\nWHERE NOT EXISTS (SELECT 1 FROM partner WHERE app_id = 'demo-wms-quality-partner')"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "INSERT INTO xm_bulky_purchaser\n  (platform, ware_id, xm_account, phone_number, password, salt, app_id, nickname,\n   remark, data_status, create_time, update_time)\nSELECT seed.platform, 1, seed.phone, seed.phone, 'DEMO_ACCOUNT_DISABLED',\n       'DEMO_ONLY', 'demo-wms-quality-customer', seed.nickname, '仓管质检演示', 0, NOW(), NOW()\nFROM (\n  SELECT 1 platform, '13900002001' phone, '昆明繁花花店' nickname\n  UNION ALL SELECT 1, '13900002002', '春城花艺'\n  UNION ALL SELECT 1, '13900002003', '云上花房'\n) seed\nWHERE NOT EXISTS (\n  SELECT 1 FROM xm_bulky_purchaser purchaser\n   WHERE purchaser.phone_number = seed.phone AND purchaser.app_id = 'demo-wms-quality-customer'\n)"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "INSERT INTO xm_bulky_order\n  (purchaser_id, order_sn, ware_id, partner_id, round_no, order_num,\n   total_item_num, total_weight, express, express_region, express_price,\n   product_total_price, total_price, receive_name, receive_tel, order_status,\n   unqualified_way, create_time, update_time, data_status)\nSELECT purchaser.id, seed.order_sn, 1, partner.id, '2026-09-17', seed.order_num,\n       seed.total_item_num, seed.total_item_num * 500, 0, 0, 0,\n       seed.total_item_num, seed.total_item_num, purchaser.nickname,\n       purchaser.phone_number, 1, seed.unqualified_way, NOW(), NOW(), 0\nFROM (\n  SELECT '13900002001' phone, 'DEMO-QC-20260917-001' order_sn, 1001 order_num, 20 total_item_num, 1 unqualified_way\n  UNION ALL SELECT '13900002002', 'DEMO-QC-20260917-002', 1002, 26, 2\n  UNION ALL SELECT '13900002003', 'DEMO-QC-20260917-003', 1003, 34, 3\n) seed\nJOIN xm_bulky_purchaser purchaser ON purchaser.phone_number = seed.phone AND purchaser.app_id = 'demo-wms-quality-customer'\nJOIN partner ON partner.app_id = 'demo-wms-quality-partner'\nWHERE NOT EXISTS (SELECT 1 FROM xm_bulky_order existing WHERE existing.order_sn = seed.order_sn)"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "INSERT INTO xm_bulky_order_item\n  (purchaser_id, supplier_id, supplier_name, order_num, sub_shelf_sn, zone,\n   shelf, zone_shelf, order_sn, round_no, supplier_no, product_id, product_name,\n   rank_num, sku_config, pic_url, supply_price, pay_price, item_num,\n   origin_item_num, actual_price, origin_actual_price, total_price,\n   origin_total_price, create_time, update_time, data_status)\nSELECT orders.purchaser_id, item.supplier_id, entry.supplier_name, item.order_num,\n       item.sub_shelf_sn, item.zone, item.shelf, item.zone_shelf, orders.order_sn,\n       item.date, CONCAT('DEMO-', item.supplier_id), item.product_id,\n       item.product_name, item.rank_num, item.sku_config, '', 1.00, 1.00,\n       item.item_num, item.item_num, item.item_num, item.item_num,\n       item.item_num, item.item_num, NOW(), NOW(), 0\nFROM xm_bulky_supplier_enter_item item\nJOIN xm_bulky_supplier_enter entry ON entry.id = item.enter_id\nJOIN xm_bulky_order orders ON orders.order_sn = CASE entry.supplier_id\n  WHEN 301 THEN 'DEMO-QC-20260917-001'\n  WHEN 302 THEN 'DEMO-QC-20260917-002'\n  WHEN 303 THEN 'DEMO-QC-20260917-003' END\nWHERE item.date = '2026-09-17' AND item.data_status = 0\n  AND entry.supplier_id IN (301, 302, 303)\n  AND NOT EXISTS (\n    SELECT 1 FROM xm_bulky_order_item existing\n     WHERE existing.order_sn = orders.order_sn AND existing.order_num = item.order_num\n       AND existing.product_id = item.product_id AND existing.data_status = 0\n  )"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter_item AS sqlite_target SET order_item_id=(SELECT order_item.id FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id JOIN xm_bulky_order_item AS order_item ON order_item.round_no = item.date AND order_item.supplier_id = item.supplier_id AND order_item.order_num = item.order_num AND order_item.product_id = item.product_id AND order_item.data_status = 0 WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-17' AND item.data_status = 0 AND entry.supplier_id IN (301, 302, 303) AND item.order_item_id = 0)),update_time=(SELECT NOW() FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id JOIN xm_bulky_order_item AS order_item ON order_item.round_no = item.date AND order_item.supplier_id = item.supplier_id AND order_item.order_num = item.order_num AND order_item.product_id = item.product_id AND order_item.data_status = 0 WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-17' AND item.data_status = 0 AND entry.supplier_id IN (301, 302, 303) AND item.order_item_id = 0)) WHERE EXISTS(SELECT 1 FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id JOIN xm_bulky_order_item AS order_item ON order_item.round_no = item.date AND order_item.supplier_id = item.supplier_id AND order_item.order_num = item.order_num AND order_item.product_id = item.product_id AND order_item.data_status = 0 WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-17' AND item.data_status = 0 AND entry.supplier_id IN (301, 302, 303) AND item.order_item_id = 0))"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter_item\nSET sku_config = CASE product_id\n  WHEN 701 THEN '成熟度:中熟,规格:20枝/扎'\n  WHEN 702 THEN '成熟度:中熟,规格:20枝/扎'\n  WHEN 703 THEN '成熟度:偏生,规格:20枝/扎'\n  WHEN 704 THEN '成熟度:中熟,规格:20枝/扎'\n  WHEN 705 THEN '成熟度:中熟,规格:10枝/扎'\n  WHEN 706 THEN '成熟度:偏熟,规格:20枝/扎'\n  ELSE sku_config END,\n  update_time = NOW()\nWHERE date = '2026-09-17' AND product_id IN (701, 702, 703, 704, 705, 706)"
+  },
+  {
+    "file": "002_admission_demo.sql",
+    "sql": "UPDATE xm_bulky_order_item AS sqlite_target SET sku_config=(SELECT enter_item.sku_config FROM xm_bulky_order_item AS order_item JOIN xm_bulky_supplier_enter_item AS enter_item ON enter_item.order_item_id = order_item.id WHERE order_item.rowid=sqlite_target.rowid AND (enter_item.date = '2026-09-17' AND enter_item.product_id IN (701, 702, 703, 704, 705, 706))),update_time=(SELECT NOW() FROM xm_bulky_order_item AS order_item JOIN xm_bulky_supplier_enter_item AS enter_item ON enter_item.order_item_id = order_item.id WHERE order_item.rowid=sqlite_target.rowid AND (enter_item.date = '2026-09-17' AND enter_item.product_id IN (701, 702, 703, 704, 705, 706))) WHERE EXISTS(SELECT 1 FROM xm_bulky_order_item AS order_item JOIN xm_bulky_supplier_enter_item AS enter_item ON enter_item.order_item_id = order_item.id WHERE order_item.rowid=sqlite_target.rowid AND (enter_item.date = '2026-09-17' AND enter_item.product_id IN (701, 702, 703, 704, 705, 706)))"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_bulky_supplier_enter\n  (type, supplier_id, supplier_name, login_tel, date, operator_id, enter_time,\n   data_status, is_qualify, is_late, quality_inspection_flag, create_time, update_time)\nSELECT 4, seed.supplier_id, seed.supplier_name, seed.phone, '2026-09-18', 0,\n       seed.enter_time, seed.entry_status, seed.is_qualify, seed.is_late,\n       seed.priority_flag, NOW(), NOW()\nFROM (\n  SELECT 401 supplier_id, '晋宁高原花卉基地' supplier_name, '13800002101' phone, '' enter_time, 0 entry_status, 1 is_qualify, 0 is_late, 1 priority_flag\n  UNION ALL SELECT 402, '呈贡七彩花场', '13800002102', '07:46:00', 1, 0, 0, 0\n  UNION ALL SELECT 403, '斗南云上玫瑰园', '13800002103', '', 0, 0, 1, 1\n  UNION ALL SELECT 404, '嵩明晨曦合作社', '13800002104', '08:18:00', 1, 1, 0, 0\n  UNION ALL SELECT 405, '安宁青山园艺', '13800002105', '', 0, 0, 0, 0\n  UNION ALL SELECT 406, '宜良春城鲜花基地', '13800002106', '08:32:00', 1, 0, 1, 1\n  UNION ALL SELECT 407, '石林百合种植园', '13800002107', '', 0, 1, 0, 0\n  UNION ALL SELECT 408, '斗南拾花供应商', '13800002108', '09:05:00', 1, 0, 0, 0\n) seed\nWHERE NOT EXISTS (\n  SELECT 1 FROM xm_bulky_supplier_enter existing\n   WHERE existing.date = '2026-09-18' AND existing.supplier_id = seed.supplier_id\n)"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_bulky_supplier_enter_item\n  (enter_id, ware_id, order_num, sub_shelf_sn, zone, shelf, zone_shelf, date,\n   supplier_id, product_id, product_name, rank_num, sku_config, item_num,\n   is_position, is_qualify, not_qualify_num, create_time, update_time, data_status)\nSELECT entry.id, 1, seed.order_num, seed.segment, seed.zone_no, seed.shelf_no,\n       CONCAT(seed.zone_no, '-', seed.shelf_no, '-', seed.segment), entry.date,\n       entry.supplier_id, seed.product_id, seed.product_name, seed.rank_num,\n       seed.sku_config, seed.item_num, seed.positioned, 0, 0, NOW(), NOW(), 0\nFROM xm_bulky_supplier_enter entry\nJOIN (\n  SELECT 401 supplier_id, 18001 order_num, '1' segment, '01' zone_no, '001' shelf_no, 801 product_id, '高原红' product_name, 1 rank_num, '成熟度:中熟,规格:20枝/扎' sku_config, 100 item_num, 1 positioned\n  UNION ALL SELECT 401, 18002, '2', '01', '002', 802, '雪山玫瑰', 1, '成熟度:偏生,规格:20枝/扎', 32, 1\n  UNION ALL SELECT 401, 18003, '3', '01', '003', 803, '蜜桃雪山', 2, '成熟度:中熟,规格:20枝/扎', 24, 1\n  UNION ALL SELECT 402, 28001, '1', '02', '011', 804, '卡罗拉', 2, '成熟度:中熟,规格:20枝/扎', 48, 1\n  UNION ALL SELECT 402, 28002, '2', '02', '012', 805, '戴安娜', 1, '成熟度:偏熟,规格:20枝/扎', 36, 1\n  UNION ALL SELECT 402, 28003, '3', '02', '013', 806, '香槟玫瑰', 1, '成熟度:中熟,规格:20枝/扎', 28, 1\n  UNION ALL SELECT 403, 38001, '1', '03', '021', 807, '自由女神', 1, '成熟度:中熟,规格:20枝/扎', 60, 1\n  UNION ALL SELECT 403, 38002, '2', '03', '022', 808, '洛神玫瑰', 2, '成熟度:偏生,规格:20枝/扎', 40, 1\n  UNION ALL SELECT 403, 38003, '3', '03', '023', 809, '粉红雪山', 1, '成熟度:中熟,规格:20枝/扎', 20, 0\n  UNION ALL SELECT 404, 48001, '1', '04', '031', 810, '白色洋桔梗', 1, '成熟度:中熟,规格:10枝/扎', 42, 1\n  UNION ALL SELECT 404, 48002, '2', '04', '032', 811, '紫色洋桔梗', 2, '成熟度:偏熟,规格:10枝/扎', 34, 1\n  UNION ALL SELECT 404, 48003, '3', '04', '033', 812, '绿色洋桔梗', 1, '成熟度:中熟,规格:10枝/扎', 26, 1\n  UNION ALL SELECT 405, 58001, '1', '05', '041', 813, '蓝色绣球', 1, '成熟度:中熟,规格:5枝/扎', 18, 1\n  UNION ALL SELECT 405, 58002, '2', '05', '042', 814, '粉色绣球', 2, '成熟度:偏生,规格:5枝/扎', 22, 1\n  UNION ALL SELECT 405, 58003, '3', '05', '043', 815, '白色绣球', 1, '成熟度:中熟,规格:5枝/扎', 16, 0\n  UNION ALL SELECT 406, 68001, '1', '06', '051', 816, '粉色康乃馨', 1, '成熟度:中熟,规格:20枝/扎', 55, 1\n  UNION ALL SELECT 406, 68002, '2', '06', '052', 817, '红色康乃馨', 2, '成熟度:偏熟,规格:20枝/扎', 38, 1\n  UNION ALL SELECT 406, 68003, '3', '06', '053', 818, '绿色康乃馨', 1, '成熟度:中熟,规格:20枝/扎', 30, 1\n  UNION ALL SELECT 407, 78001, '1', '07', '061', 819, '西伯利亚百合', 1, '成熟度:中熟,规格:10枝/扎', 44, 1\n  UNION ALL SELECT 407, 78002, '2', '07', '062', 820, '索邦百合', 2, '成熟度:偏生,规格:10枝/扎', 28, 1\n  UNION ALL SELECT 407, 78003, '3', '07', '063', 821, '黄天霸百合', 1, '成熟度:中熟,规格:10枝/扎', 20, 1\n  UNION ALL SELECT 408, 88001, '1', '08', '071', 822, '向日葵', 1, '成熟度:中熟,规格:10枝/扎', 50, 1\n  UNION ALL SELECT 408, 88002, '2', '08', '072', 823, '紫色勿忘我', 3, '成熟度:偏熟,规格:1kg/扎', 25, 1\n  UNION ALL SELECT 408, 88003, '3', '08', '073', 824, '小雏菊', 2, '成熟度:中熟,规格:20枝/扎', 35, 1\n) seed ON seed.supplier_id = entry.supplier_id\nWHERE entry.date = '2026-09-18'\n  AND NOT EXISTS (\n    SELECT 1 FROM xm_bulky_supplier_enter_item existing\n     WHERE existing.enter_id = entry.id AND existing.order_num = seed.order_num\n       AND existing.sub_shelf_sn = seed.segment AND existing.data_status = 0\n  )"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO partner (name, app_id, contact_name, contact_tel, status)\nSELECT '梦花本地测试渠道', 'demo-local-quality-partner', '测试运营', '13900003000', 1\nWHERE NOT EXISTS (SELECT 1 FROM partner WHERE app_id = 'demo-local-quality-partner')"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_bulky_purchaser\n  (platform, ware_id, xm_account, phone_number, password, salt, app_id, nickname,\n   remark, data_status, create_time, update_time)\nSELECT 1, 1, seed.phone, seed.phone, 'DEMO_ACCOUNT_DISABLED', 'DEMO_ONLY',\n       'demo-local-quality-customer', seed.nickname, '本地质检演示', 0, NOW(), NOW()\nFROM (\n  SELECT '13900003001' phone, '昆明繁花花店' nickname\n  UNION ALL SELECT '13900003002', '春城花艺馆'\n  UNION ALL SELECT '13900003003', '云上花房'\n  UNION ALL SELECT '13900003004', '拾光花礼'\n  UNION ALL SELECT '13900003005', '南屏鲜花店'\n  UNION ALL SELECT '13900003006', '滇池花艺工作室'\n) seed\nWHERE NOT EXISTS (\n  SELECT 1 FROM xm_bulky_purchaser p\n   WHERE p.phone_number = seed.phone AND p.app_id = 'demo-local-quality-customer'\n)"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_bulky_order\n  (purchaser_id, order_sn, ware_id, partner_id, round_no, order_num,\n   total_item_num, total_weight, express, express_region, express_price,\n   product_total_price, total_price, receive_name, receive_tel, order_status,\n   unqualified_way, create_time, update_time, data_status)\nSELECT purchaser.id, seed.order_sn, 1, partner.id, '2026-09-18', seed.order_num,\n       seed.total_num, seed.total_num * 500, 0, 0, 0, seed.total_num,\n       seed.total_num, purchaser.nickname, purchaser.phone_number, 1,\n       seed.unqualified_way, NOW(), NOW(), 0\nFROM (\n  SELECT '13900003001' phone, 'LOCAL-QC-20260918-001' order_sn, 2001 order_num, 156 total_num, 1 unqualified_way\n  UNION ALL SELECT '13900003002', 'LOCAL-QC-20260918-002', 2002, 112, 2\n  UNION ALL SELECT '13900003003', 'LOCAL-QC-20260918-003', 2003, 120, 3\n  UNION ALL SELECT '13900003004', 'LOCAL-QC-20260918-004', 2004, 102, 1\n  UNION ALL SELECT '13900003005', 'LOCAL-QC-20260918-005', 2005, 93, 2\n  UNION ALL SELECT '13900003006', 'LOCAL-QC-20260918-006', 2006, 119, 3\n) seed\nJOIN xm_bulky_purchaser purchaser\n  ON purchaser.phone_number = seed.phone AND purchaser.app_id = 'demo-local-quality-customer'\nJOIN partner ON partner.app_id = 'demo-local-quality-partner'\nWHERE NOT EXISTS (SELECT 1 FROM xm_bulky_order existing WHERE existing.order_sn = seed.order_sn)"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_bulky_order_item\n  (purchaser_id, supplier_id, supplier_name, order_num, sub_shelf_sn, zone,\n   shelf, zone_shelf, order_sn, round_no, supplier_no, product_id, product_name,\n   rank_num, sku_config, pic_url, supply_price, pay_price, item_num,\n   origin_item_num, actual_price, origin_actual_price, total_price,\n   origin_total_price, create_time, update_time, data_status)\nSELECT orders.purchaser_id, item.supplier_id, entry.supplier_name, item.order_num,\n       item.sub_shelf_sn, item.zone, item.shelf, item.zone_shelf, orders.order_sn,\n       item.date, CONCAT('LOCAL-', item.supplier_id), item.product_id,\n       item.product_name, item.rank_num, item.sku_config, '',\n       CASE item.rank_num WHEN 1 THEN 2.80 WHEN 2 THEN 2.20 ELSE 1.80 END,\n       CASE item.rank_num WHEN 1 THEN 3.60 WHEN 2 THEN 3.00 ELSE 2.50 END,\n       item.item_num, item.item_num, item.item_num, item.item_num,\n       item.item_num, item.item_num, NOW(), NOW(), 0\nFROM xm_bulky_supplier_enter_item item\nJOIN xm_bulky_supplier_enter entry ON entry.id = item.enter_id\nJOIN xm_bulky_order orders ON orders.order_sn = CASE\n  WHEN entry.supplier_id IN (401, 402) THEN 'LOCAL-QC-20260918-001'\n  WHEN entry.supplier_id = 403 THEN 'LOCAL-QC-20260918-002'\n  WHEN entry.supplier_id = 404 THEN 'LOCAL-QC-20260918-003'\n  WHEN entry.supplier_id = 405 THEN 'LOCAL-QC-20260918-004'\n  WHEN entry.supplier_id = 406 THEN 'LOCAL-QC-20260918-005'\n  ELSE 'LOCAL-QC-20260918-006' END\nWHERE item.date = '2026-09-18' AND item.data_status = 0\n  AND entry.supplier_id BETWEEN 401 AND 408\n  AND NOT EXISTS (\n    SELECT 1 FROM xm_bulky_order_item existing\n     WHERE existing.order_sn = orders.order_sn AND existing.order_num = item.order_num\n       AND existing.product_id = item.product_id AND existing.data_status = 0\n  )"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter_item AS sqlite_target SET order_item_id=(SELECT order_item.id FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_order_item AS order_item ON order_item.round_no = item.date AND order_item.supplier_id = item.supplier_id AND order_item.order_num = item.order_num AND order_item.product_id = item.product_id AND order_item.data_status = 0 WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408)),update_time=(SELECT NOW() FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_order_item AS order_item ON order_item.round_no = item.date AND order_item.supplier_id = item.supplier_id AND order_item.order_num = item.order_num AND order_item.product_id = item.product_id AND order_item.data_status = 0 WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408)) WHERE EXISTS(SELECT 1 FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_order_item AS order_item ON order_item.round_no = item.date AND order_item.supplier_id = item.supplier_id AND order_item.order_num = item.order_num AND order_item.product_id = item.product_id AND order_item.data_status = 0 WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408))"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter_item AS sqlite_target SET limit_distribution_flag=(SELECT CASE WHEN entry.supplier_id IN (403, 407) THEN 1 ELSE 0 END FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408)),duty_flag=(SELECT CASE WHEN entry.supplier_id IN (404, 407) THEN 1 ELSE 0 END FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408)),no_after_sale_flag=(SELECT CASE WHEN entry.supplier_id = 406 THEN 1 ELSE 0 END FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408)),duty_remark=(SELECT CASE WHEN entry.supplier_id IN (404, 407) THEN '本地演示：供应商包装与到货品质责任' ELSE '' END FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408)),update_time=(SELECT NOW() FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408)) WHERE EXISTS(SELECT 1 FROM xm_bulky_supplier_enter_item AS item JOIN xm_bulky_supplier_enter AS entry ON entry.id = item.enter_id WHERE item.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408))"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_bulky_inspection\n  (date, enter_item_id, shelf_sn, zoen_shelf, sub_shelf_sn, product_id,\n   product_name, rank_num, sku_config, item_num, receive_tel, supplier_id,\n   supplier_name, inspection_flag, focus_flag, status, assigned_user_id,\n   assigned_user_name, remark)\nSELECT item.date, item.id, CAST(item.zone AS UNSIGNED), item.zone_shelf,\n       item.sub_shelf_sn, item.product_id, item.product_name, item.rank_num,\n       item.sku_config, item.item_num, entry.login_tel, item.supplier_id,\n       entry.supplier_name, entry.quality_inspection_flag,\n       IF(item.item_num >= 50, 1, 0), 0, 1001, '李师傅', ''\nFROM xm_bulky_supplier_enter_item item\nJOIN xm_bulky_supplier_enter entry ON entry.id = item.enter_id\nWHERE item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408\n  AND NOT EXISTS (\n    SELECT 1 FROM xm_bulky_inspection existing\n     WHERE existing.date = item.date AND existing.enter_item_id = item.id\n       AND existing.delete_time IS NULL\n  )"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_inspection_reason_record\n  (date, enter_item_id, order_item_id, code_content, op, reason_id, reason_name,\n   parent_reason_id, parent_reason_name, user_id, user_name,\n   evidence_media_json, allow_downgrade_restock, create_time, update_time, data_status)\nSELECT item.date, item.id, item.order_item_id, CONCAT('QI-', item.id, '-', mark.unit_no),\n       mark.operation, reason.id, reason.reason_name, parent.id, parent.reason_name,\n       1001, '李师傅', '[]', mark.allow_downgrade, NOW(), NOW(), 0\nFROM xm_bulky_supplier_enter_item item\nJOIN (\n  SELECT 801 product_id, 1 unit_no, 7 operation, '扎数不足' reason_name, 0 allow_downgrade\n  UNION ALL SELECT 801, 2, 3, '花头损伤', 0\n  UNION ALL SELECT 801, 3, 1, '开放度不符', 0\n  UNION ALL SELECT 801, 7, 12, '挤压折断', 0\n  UNION ALL SELECT 801, 18, 6, '扎数不足', 1\n  UNION ALL SELECT 804, 4, 2, '病虫害或腐烂', 0\n  UNION ALL SELECT 804, 9, 5, '失水萎蔫', 1\n  UNION ALL SELECT 807, 2, 7, '扎数不足', 0\n  UNION ALL SELECT 810, 5, 3, '花头损伤', 0\n  UNION ALL SELECT 813, 3, 12, '规格混装', 0\n  UNION ALL SELECT 816, 6, 1, '开放度不符', 0\n  UNION ALL SELECT 819, 8, 6, '扎数不足', 1\n) mark ON mark.product_id = item.product_id\nJOIN xm_inspection_reason_config reason\n  ON reason.reason_name = mark.reason_name AND reason.level = 2 AND reason.data_status = 0\nJOIN xm_inspection_reason_config parent ON parent.id = reason.parent_id AND parent.data_status = 0\nWHERE item.date = '2026-09-18'\n  AND NOT EXISTS (\n    SELECT 1 FROM xm_inspection_reason_record existing\n     WHERE existing.enter_item_id = item.id AND existing.data_status = 0\n       AND CAST(SUBSTRING_INDEX(existing.code_content, '-', -1) AS UNSIGNED) = mark.unit_no\n  )"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "INSERT INTO xm_quality_unit_allocation\n  (enter_item_id, unit_no, allocated, operator_id, operator_name)\nSELECT item.id, allocated.unit_no, 1, 1001, '李师傅'\nFROM xm_bulky_supplier_enter_item item\nJOIN (\n  SELECT 801 product_id, 5 unit_no\n  UNION ALL SELECT 801, 6\n  UNION ALL SELECT 801, 10\n  UNION ALL SELECT 804, 1\n  UNION ALL SELECT 804, 2\n  UNION ALL SELECT 807, 4\n  UNION ALL SELECT 810, 1\n  UNION ALL SELECT 816, 2\n  UNION ALL SELECT 819, 3\n) allocated ON allocated.product_id = item.product_id\nWHERE item.date = '2026-09-18'\nON DUPLICATE KEY UPDATE allocated = VALUES(allocated), operator_id = VALUES(operator_id),\n  operator_name = VALUES(operator_name), update_time = NOW()"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter_item item\nSET item.not_qualify_num = (\n      SELECT COUNT(DISTINCT record.code_content)\n      FROM xm_inspection_reason_record record\n      WHERE record.enter_item_id = item.id AND record.data_status = 0\n    ),\n    item.is_qualify = IF(EXISTS(\n      SELECT 1 FROM xm_inspection_reason_record record\n      WHERE record.enter_item_id = item.id AND record.data_status = 0\n    ), 10, 0),\n    item.qualify_user_id = 1001,\n    item.qualify_user_name = IF(EXISTS(\n      SELECT 1 FROM xm_inspection_reason_record record\n      WHERE record.enter_item_id = item.id AND record.data_status = 0\n    ), '李师傅', ''),\n    item.update_time = NOW()\nWHERE item.date = '2026-09-18' AND item.supplier_id BETWEEN 401 AND 408"
+  },
+  {
+    "file": "003_local_comprehensive_demo.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter entry\nSET entry.is_qualify = EXISTS(\n      SELECT 1 FROM xm_bulky_supplier_enter_item item\n      WHERE item.enter_id = entry.id AND item.data_status = 0 AND item.is_qualify = 10\n    ),\n    entry.update_time = NOW()\nWHERE entry.date = '2026-09-18' AND entry.supplier_id BETWEEN 401 AND 408"
+  },
+  {
+    "file": "004_distribution_filters_demo.sql",
+    "sql": "INSERT INTO xm_bulky_wms_area\n  (code, area_name, start_shelf, end_shelf, ware_type, sort_config, sub_area, segment_area,\n   pack_income_config, standby, sequence, remark, area_manager_id, area_manager_name,\n   operator_id, operator_name, last_operator_id, last_operator_name, status)\nVALUES\n  ('01','一区',1,10,0,5,'','[\"1\",\"2\",\"3\"]','',0,1,'自提区',0,'',0,'本地测试',0,'本地测试',1),\n  ('02','二区',11,20,0,0,'','[\"1\",\"2\",\"3\"]','',0,2,'普通区',0,'',0,'本地测试',0,'本地测试',1),\n  ('03','三区',21,30,0,6,'','[\"1\",\"2\",\"3\"]','',0,3,'早班区',0,'',0,'本地测试',0,'本地测试',1),\n  ('04','四区',31,40,0,3,'','[\"1\",\"2\",\"3\"]','',0,4,'自提早班区',0,'',0,'本地测试',0,'本地测试',1),\n  ('05','五区',41,50,0,0,'','[\"1\",\"2\",\"3\"]','',0,5,'待补区',0,'',0,'本地测试',0,'本地测试',1),\n  ('06','六区',51,60,0,0,'','[\"1\",\"2\",\"3\"]','',0,6,'普通区',0,'',0,'本地测试',0,'本地测试',1),\n  ('07','七区',61,70,1,0,'','[\"1\",\"2\",\"3\"]','',0,7,'城市仓',0,'',0,'本地测试',0,'本地测试',1),\n  ('08','八区',71,80,1,6,'','[\"1\",\"2\",\"3\"]','',0,8,'城市仓早班',0,'',0,'本地测试',0,'本地测试',1)\nON DUPLICATE KEY UPDATE area_name=VALUES(area_name),ware_type=VALUES(ware_type),sort_config=VALUES(sort_config),segment_area=VALUES(segment_area),remark=VALUES(remark),status=1"
+  },
+  {
+    "file": "004_distribution_filters_demo.sql",
+    "sql": "UPDATE xm_bulky_order AS sqlite_target SET delivery_type=(SELECT CASE WHEN item.zone IN ('01', '04', '08') THEN 2 ELSE 1 END FROM xm_bulky_order AS o JOIN xm_bulky_order_item AS oi ON oi.order_sn = o.order_sn AND oi.data_status = 0 JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id AND item.data_status = 0 WHERE o.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND o.data_status = 0)) WHERE EXISTS(SELECT 1 FROM xm_bulky_order AS o JOIN xm_bulky_order_item AS oi ON oi.order_sn = o.order_sn AND oi.data_status = 0 JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id AND item.data_status = 0 WHERE o.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND o.data_status = 0))"
+  },
+  {
+    "file": "004_distribution_filters_demo.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter_item\nSET restock_item_num=CASE WHEN zone='05' THEN 3 WHEN zone='08' THEN 2 ELSE restock_item_num END,\n    update_time=NOW()\nWHERE date='2026-09-18' AND data_status=0"
+  },
+  {
+    "file": "005_distribution_multi_order_shelf.sql",
+    "sql": "UPDATE xm_bulky_supplier_enter_item\nSET zone='01', shelf='001', sub_shelf_sn='1', zone_shelf='01-001-1',\n    product_name=IF(supplier_id=401 AND order_num=18002,'高原红',product_name),\n    rank_num=IF(supplier_id=401 AND order_num=18002,1,rank_num),\n    sku_config=IF(supplier_id=401 AND order_num=18002,'成熟度:中熟,规格:20枝/扎',sku_config),\n    update_time=NOW()\nWHERE date='2026-09-18' AND ((supplier_id=401 AND order_num=18002) OR (supplier_id=402 AND order_num=28001))"
+  },
+  {
+    "file": "005_distribution_multi_order_shelf.sql",
+    "sql": "UPDATE xm_bulky_order_item AS sqlite_target SET zone=(SELECT item.zone FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)),shelf=(SELECT item.shelf FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)),sub_shelf_sn=(SELECT item.sub_shelf_sn FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)),zone_shelf=(SELECT item.zone_shelf FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)),product_name=(SELECT item.product_name FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)),rank_num=(SELECT item.rank_num FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)),sku_config=(SELECT item.sku_config FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)),update_time=(SELECT NOW() FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0)) WHERE EXISTS(SELECT 1 FROM xm_bulky_order_item AS oi JOIN xm_bulky_supplier_enter_item AS item ON item.order_item_id = oi.id WHERE oi.rowid=sqlite_target.rowid AND (item.date = '2026-09-18' AND item.zone_shelf = '01-001-1' AND item.data_status = 0))"
+  },
+  {
+    "file": "006_supplier_base_short_names.sql",
+    "sql": "INSERT INTO xm_bulky_supplier (id,supplier_name,supplier_tag,login_tel,create_time,update_time,data_status)\nSELECT entry.supplier_id,entry.supplier_name,\n       CASE entry.supplier_id WHEN 401 THEN '晋宁' WHEN 402 THEN '呈贡' WHEN 403 THEN '斗南'\n         WHEN 404 THEN '嵩明' WHEN 405 THEN '安宁' WHEN 406 THEN '宜良' WHEN 407 THEN '石林' ELSE '斗南' END,\n       entry.login_tel,NOW(),NOW(),0\nFROM xm_bulky_supplier_enter entry\nWHERE entry.date='2026-09-18'\nON DUPLICATE KEY UPDATE supplier_name=VALUES(supplier_name),supplier_tag=VALUES(supplier_tag),login_tel=VALUES(login_tel),update_time=NOW(),data_status=0"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p1=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900003001' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p2=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900003002' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p3=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900003003' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p4=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900003004' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p5=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900003005' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p6=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900003006' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p7=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900002001' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p8=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900002002' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "SET @p9=(SELECT id FROM xm_bulky_purchaser WHERE phone_number='13900002003' AND data_status=0 LIMIT 1)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p1,'13900003001','昆明繁花花店',1,DATE_FORMAT(CURDATE(),'%Y-%m-%d'),'#07-001','CS-DEMO-001','[]','demo:cold:001',4,0,0,0,10,DATE_ADD(CURDATE(),INTERVAL 1 DAY),'4件包裹，等待客户通知',1001,'李师傅',DATE_SUB(NOW(),INTERVAL 2 HOUR) WHERE @p1 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-001')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p2,'13900003002','春城花艺馆',2,DATE_FORMAT(CURDATE(),'%Y-%m-%d'),'#07-006','CS-DEMO-002','[]','demo:cold:002',0,0,18,18,10,DATE_ADD(CURDATE(),INTERVAL 2 DAY),'蜜桃雪山 A级',1001,'李师傅',DATE_SUB(NOW(),INTERVAL 4 HOUR) WHERE @p2 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-002')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p3,'13900003003','云上花房',1,DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 1 DAY),'%Y-%m-%d'),'#08-003','CS-DEMO-003','[]','demo:cold:003',6,1,0,0,10,CURDATE(),'剩余5件，今日联系客户',1002,'王主管',DATE_SUB(NOW(),INTERVAL 1 DAY) WHERE @p3 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-003')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p4,'13900003004','拾光花礼',2,DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 1 DAY),'%Y-%m-%d'),'#08-011','CS-DEMO-004','[]','demo:cold:004',0,0,12,12,10,DATE_SUB(CURDATE(),INTERVAL 1 DAY),'临期提醒不代表已出库',1002,'王主管',DATE_SUB(NOW(),INTERVAL 28 HOUR) WHERE @p4 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-004')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p5,'13900003005','南屏鲜花店',1,DATE_FORMAT(CURDATE(),'%Y-%m-%d'),'#09-002','CS-DEMO-005','[]','demo:cold:005',3,0,0,0,40,CURDATE(),'已关联今日发货单',1001,'李师傅',DATE_SUB(NOW(),INTERVAL 5 HOUR) WHERE @p5 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-005')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p6,'13900003006','滇池花艺工作室',2,DATE_FORMAT(CURDATE(),'%Y-%m-%d'),'#09-007','CS-DEMO-006','[]','demo:cold:006',0,0,20,20,40,CURDATE(),'直接出库，需留存照片',1001,'李师傅',DATE_SUB(NOW(),INTERVAL 6 HOUR) WHERE @p6 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-006')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p7,'13900002001','昆明繁花花店',2,DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 1 DAY),'%Y-%m-%d'),'#10-003','CS-DEMO-007','[]','demo:cold:007',0,0,30,30,40,CURDATE(),'转代卖，审批出库16扎',1002,'王主管',DATE_SUB(NOW(),INTERVAL 30 HOUR) WHERE @p7 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-007')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p8,'13900002002','春城花艺',1,DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 2 DAY),'%Y-%m-%d'),'#06-012','CS-DEMO-008','[]',NULL,2,2,0,0,50,DATE_SUB(CURDATE(),INTERVAL 1 DAY),'关联发货单出库完成',1001,'李师傅',DATE_SUB(NOW(),INTERVAL 2 DAY) WHERE @p8 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-008')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p9,'13900002003','云上花房',2,DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 2 DAY),'%Y-%m-%d'),'#06-018','CS-DEMO-009','[]',NULL,0,0,15,0,50,DATE_SUB(CURDATE(),INTERVAL 1 DAY),'直接出库完成',1002,'王主管',DATE_SUB(NOW(),INTERVAL 2 DAY) WHERE @p9 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-009')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_stock (purchaser_id,purchaser_mobile,purchaser_nick,store_type,store_round_no,location_no,origin_send_no,image_urls,stock_key,package_total,package_out,bunch_num,remaining_bunch_num,stock_status,plan_ship_date,remark,in_user_id,in_user_name,in_time)\nSELECT @p1,'13900003001','昆明繁花花店',2,DATE_FORMAT(DATE_SUB(CURDATE(),INTERVAL 3 DAY),'%Y-%m-%d'),'#05-009','CS-DEMO-010','[]',NULL,0,0,25,0,50,DATE_SUB(CURDATE(),INTERVAL 2 DAY),'转代卖实际出库20扎',1001,'李师傅',DATE_SUB(NOW(),INTERVAL 3 DAY) WHERE @p1 IS NOT NULL AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_stock WHERE origin_send_no='CS-DEMO-010')"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_out_task (cold_stock_id,out_type,purchaser_id,store_type,link_send_no,link_purchaser_nick,link_purchaser_mobile,link_zone_shelf,out_package_num,out_bunch_num,task_status,out_remark,operator_id,operator_name,operate_time)\nSELECT s.id,1,s.purchaser_id,s.store_type,'SEND-DEMO-005',s.purchaser_nick,s.purchaser_mobile,'#12-006',3,0,10,'关联今日发货单',1002,'王主管',DATE_SUB(NOW(),INTERVAL 1 HOUR) FROM xm_bulky_cold_stock s WHERE s.origin_send_no='CS-DEMO-005' AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_out_task t WHERE t.cold_stock_id=s.id AND t.data_status=0)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_out_task (cold_stock_id,out_type,purchaser_id,store_type,out_package_num,out_bunch_num,express_name,task_status,out_remark,operator_id,operator_name,operate_time)\nSELECT s.id,2,s.purchaser_id,s.store_type,0,20,'顺丰速运',10,'客户到仓自提',1002,'王主管',DATE_SUB(NOW(),INTERVAL 2 HOUR) FROM xm_bulky_cold_stock s WHERE s.origin_send_no='CS-DEMO-006' AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_out_task t WHERE t.cold_stock_id=s.id AND t.data_status=0)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_out_task (cold_stock_id,out_type,purchaser_id,store_type,out_package_num,out_bunch_num,task_status,out_remark,operator_id,operator_name,operate_time)\nSELECT s.id,3,s.purchaser_id,s.store_type,0,16,10,'转代卖审批16扎',1002,'王主管',DATE_SUB(NOW(),INTERVAL 3 HOUR) FROM xm_bulky_cold_stock s WHERE s.origin_send_no='CS-DEMO-007' AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_out_task t WHERE t.cold_stock_id=s.id AND t.data_status=0)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_out_task (cold_stock_id,out_type,purchaser_id,store_type,link_send_no,link_purchaser_nick,link_purchaser_mobile,link_zone_shelf,out_package_num,out_bunch_num,task_status,out_remark,operator_id,operator_name,operate_time,finish_user_id,finish_user_name,finish_time,finish_image_urls,finish_remark)\nSELECT s.id,1,s.purchaser_id,s.store_type,'SEND-DEMO-008',s.purchaser_nick,s.purchaser_mobile,'#11-008',2,0,20,'关联发货单',1002,'王主管',DATE_SUB(NOW(),INTERVAL 1 DAY),1001,'李师傅',DATE_SUB(NOW(),INTERVAL 20 HOUR),'[\"/uploads/cold-storage/demo-out-008.jpg\"]','数量核对无误' FROM xm_bulky_cold_stock s WHERE s.origin_send_no='CS-DEMO-008' AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_out_task t WHERE t.cold_stock_id=s.id AND t.data_status=0)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_out_task (cold_stock_id,out_type,purchaser_id,store_type,out_package_num,out_bunch_num,express_name,task_status,out_remark,operator_id,operator_name,operate_time,finish_user_id,finish_user_name,finish_time,finish_image_urls,finish_remark)\nSELECT s.id,2,s.purchaser_id,s.store_type,0,15,'京东物流',20,'直接出库',1002,'王主管',DATE_SUB(NOW(),INTERVAL 1 DAY),1001,'李师傅',DATE_SUB(NOW(),INTERVAL 18 HOUR),'[\"/uploads/cold-storage/demo-out-009.jpg\"]','已交接物流' FROM xm_bulky_cold_stock s WHERE s.origin_send_no='CS-DEMO-009' AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_out_task t WHERE t.cold_stock_id=s.id AND t.data_status=0)"
+  },
+  {
+    "file": "007_cold_storage_demo.sql",
+    "sql": "INSERT INTO xm_bulky_cold_out_task (cold_stock_id,out_type,purchaser_id,store_type,out_package_num,out_bunch_num,finish_bunch_num,task_status,out_remark,operator_id,operator_name,operate_time,finish_user_id,finish_user_name,finish_time,finish_image_urls,finish_remark)\nSELECT s.id,3,s.purchaser_id,s.store_type,0,22,20,20,'转代卖审批22扎',1002,'王主管',DATE_SUB(NOW(),INTERVAL 2 DAY),1001,'李师傅',DATE_SUB(NOW(),INTERVAL 42 HOUR),'[\"/uploads/cold-storage/demo-out-010.jpg\"]','实际出库20扎' FROM xm_bulky_cold_stock s WHERE s.origin_send_no='CS-DEMO-010' AND NOT EXISTS(SELECT 1 FROM xm_bulky_cold_out_task t WHERE t.cold_stock_id=s.id AND t.data_status=0)"
+  },
+  {
+    "file": "008_warehouse_pipeline_40_shelves.sql",
+    "sql": "INSERT INTO xm_bulky_supplier_enter\n  (type,supplier_id,supplier_name,login_tel,date,operator_id,enter_time,data_status,is_qualify,is_late,quality_inspection_flag,create_time,update_time)\nSELECT 4,9401,'本地联动演示花场','13800009401','2026-09-20',0,'07:30:00',1,1,0,1,NOW(),NOW()\nWHERE NOT EXISTS (SELECT 1 FROM xm_bulky_supplier_enter WHERE date='2026-09-20' AND supplier_id=9401)"
+  },
+  {
+    "file": "008_warehouse_pipeline_40_shelves.sql",
+    "sql": "INSERT INTO xm_bulky_supplier_enter_item\n  (enter_id,ware_id,order_num,sub_shelf_sn,zone,shelf,zone_shelf,order_sn,date,supplier_id,product_id,product_name,rank_num,sku_config,item_num,is_position,is_qualify,not_qualify_num,qualify_user_id,qualify_user_name,prepare_item_num,prepare_user_id,prepare_user_name,restock_item_num,lack_replenish_num,create_time,update_time,data_status)\nWITH RECURSIVE seq AS (SELECT 1 n UNION ALL SELECT n+1 FROM seq WHERE n<40)\nSELECT e.id,1,9100+n,CAST(1+MOD(n-1,3) AS CHAR),'09',LPAD(100+n,3,'0'),CONCAT('09-',LPAD(100+n,3,'0'),'-',1+MOD(n-1,3)),CONCAT('LOCAL-PIPE-',LPAD(n,3,'0')),'2026-09-20',9401,940000+n,\n       ELT(1+MOD(n-1,8),'红玫瑰','粉雪山','向日葵','洋桔梗','康乃馨','绣球','百合','勿忘我'),1+MOD(n-1,3),'成熟度:中熟,规格:20枝/扎',12+MOD(n*3,13),1,\n       CASE WHEN n<=8 THEN 0 WHEN MOD(n,5)=0 THEN 10 ELSE 1 END,\n       CASE WHEN MOD(n,5)=0 THEN 2 ELSE 0 END,\n       CASE WHEN n<=8 THEN 0 ELSE 1001 END,CASE WHEN n<=8 THEN '' ELSE '质检员演示' END,\n       CASE WHEN n<=8 THEN 0 WHEN n<=12 THEN FLOOR((12+MOD(n*3,13))*.25) WHEN n<=16 THEN FLOOR((12+MOD(n*3,13))*.6) ELSE 12+MOD(n*3,13) END,\n       CASE WHEN n<=8 THEN 0 ELSE 1002 END,CASE WHEN n<=8 THEN '' ELSE '配货员演示' END,\n       CASE WHEN MOD(n,7)=0 THEN 2 ELSE 0 END,CASE WHEN MOD(n,7)=0 THEN 2 ELSE 0 END,NOW(),NOW(),0\nFROM seq JOIN xm_bulky_supplier_enter e ON e.date='2026-09-20' AND e.supplier_id=9401\nWHERE NOT EXISTS (SELECT 1 FROM xm_bulky_supplier_enter_item x WHERE x.date='2026-09-20' AND x.order_num=9100+n AND x.supplier_id=9401 AND x.data_status=0)"
+  },
+  {
+    "file": "008_warehouse_pipeline_40_shelves.sql",
+    "sql": "INSERT INTO xm_bulky_inspection\n  (date,enter_item_id,shelf_sn,zoen_shelf,sub_shelf_sn,product_id,product_name,rank_num,sku_config,item_num,receive_tel,supplier_id,supplier_name,inspection_flag,focus_flag,status,user_id,user_name,assigned_user_id,assigned_user_name,assign_time,finish_time,remark)\nSELECT i.date,i.id,i.order_num,i.zone_shelf,i.sub_shelf_sn,i.product_id,i.product_name,i.rank_num,i.sku_config,i.item_num,'13800009401',i.supplier_id,'本地联动演示花场',IF(MOD(i.order_num,4)=0,1,0),IF(MOD(i.order_num,6)=0,1,0),\n       CASE WHEN i.order_num<=9108 THEN 0 WHEN MOD(i.order_num,5)=0 THEN 10 WHEN MOD(i.order_num,4)=0 THEN 2 ELSE 1 END,\n       CASE WHEN i.order_num<=9108 THEN 0 ELSE 1001 END,CASE WHEN i.order_num<=9108 THEN '' ELSE '质检员演示' END,1001,'质检员演示',NOW(),CASE WHEN i.order_num<=9108 THEN NULL ELSE NOW() END,\n       CASE WHEN MOD(i.order_num,5)=0 THEN '演示：发现花头损伤' ELSE '' END\nFROM xm_bulky_supplier_enter_item i\nWHERE i.date='2026-09-20' AND i.supplier_id=9401\n  AND NOT EXISTS (SELECT 1 FROM xm_bulky_inspection q WHERE q.date=i.date AND q.enter_item_id=i.id AND q.delete_time IS NULL)"
+  },
+  {
+    "file": "008_warehouse_pipeline_40_shelves.sql",
+    "sql": "INSERT INTO xm_inspection_reason_record\n  (date,enter_item_id,order_item_id,code_content,op,reason_id,reason_name,parent_reason_id,parent_reason_name,user_id,user_name,evidence_media_json,allow_downgrade_restock,create_time,update_time,data_status)\nSELECT i.date,i.id,i.order_item_id,CONCAT('QI-',i.id,'-1'),3,0,'花头损伤',0,'外观问题',1001,'质检员演示','[]',0,NOW(),NOW(),0\nFROM xm_bulky_supplier_enter_item i WHERE i.date='2026-09-20' AND i.supplier_id=9401 AND MOD(i.order_num,5)=0\nAND NOT EXISTS (SELECT 1 FROM xm_inspection_reason_record r WHERE r.enter_item_id=i.id AND r.code_content=CONCAT('QI-',i.id,'-1') AND r.data_status=0)"
+  },
+  {
+    "file": "008_warehouse_pipeline_40_shelves.sql",
+    "sql": "INSERT INTO xm_quality_unit_allocation (enter_item_id,unit_no,allocated,operator_id,operator_name)\nWITH RECURSIVE units AS (SELECT 1 n UNION ALL SELECT n+1 FROM units WHERE n<30)\nSELECT i.id,units.n,1,1002,'配货员演示'\nFROM xm_bulky_supplier_enter_item i JOIN units ON units.n<=i.prepare_item_num\nWHERE i.date='2026-09-20' AND i.supplier_id=9401\nON DUPLICATE KEY UPDATE allocated=1,operator_id=VALUES(operator_id),operator_name=VALUES(operator_name),update_time=NOW()"
+  },
+  {
+    "file": "008_warehouse_pipeline_40_shelves.sql",
+    "sql": "INSERT INTO xm_bulky_shelf_package_status\n  (round_no,shelf_sn,ware_id,zone,zone_shelf,express_id,package_status,complete_type,box_time,complete_time,restock_status,distribution_status,has_sub_shelf,manual_user_id,self_pickup,delivery_time,create_time,update_time,data_status)\nSELECT '2026-09-20',i.order_num,1,i.zone,i.zone_shelf,1,\n       CASE WHEN i.order_num BETWEEN 9133 AND 9136 THEN 1 ELSE 0 END,0,NOW(),CASE WHEN i.order_num BETWEEN 9133 AND 9136 THEN NOW() ELSE NULL END,\n       CASE WHEN MOD(i.order_num,7)=0 THEN 1 ELSE 0 END,1,0,0,CASE WHEN i.order_num>=9137 THEN 1 ELSE 0 END,\n       CASE WHEN MOD(i.order_num,3)=0 THEN '09:30:00' WHEN MOD(i.order_num,3)=1 THEN '13:30:00' ELSE '18:30:00' END,NOW(),NOW(),0\nFROM xm_bulky_supplier_enter_item i\nWHERE i.date='2026-09-20' AND i.supplier_id=9401 AND i.order_num>=9117\nON DUPLICATE KEY UPDATE package_status=VALUES(package_status),complete_time=VALUES(complete_time),restock_status=VALUES(restock_status),distribution_status=1,self_pickup=VALUES(self_pickup),delivery_time=VALUES(delivery_time),update_time=NOW()"
+  },
+  {
+    "file": "008_warehouse_pipeline_40_shelves.sql",
+    "sql": "INSERT INTO xm_bulky_wms_express_package\n  (type,round_no,ware_id,partner_id,province,city,send_no,shelf_sn,sub_shelf_sn,self_take_type,zone,shelf,zone_shelf,serial_num,package_num,item_num,express_id,region_id,express_type,express_status,express_user_id,express_user_name,package_user_id,package_user_name,url,package_time,package_id,package_info,suggest_pack_id,suggest_pack_info,valid_status,create_time,update_time,data_status)\nWITH RECURSIVE serials AS (SELECT 1 n UNION ALL SELECT n+1 FROM serials WHERE n<2)\nSELECT 2,'2026-09-20',1,0,'云南省','昆明市',CONCAT('LOCAL-PACK-',i.order_num,'-',serials.n),i.order_num,'',IF(i.order_num>=9137,2,0),i.zone,i.shelf,i.zone_shelf,serials.n,2,CEIL(i.item_num/2),1,1,\n       CASE WHEN MOD(i.order_num,3)=0 THEN 1 ELSE 2 END,\n       CASE WHEN i.order_num BETWEEN 9125 AND 9132 AND serials.n=1 THEN 10 WHEN i.order_num BETWEEN 9133 AND 9136 THEN 10 WHEN i.order_num>=9137 AND MOD(i.order_num+serials.n,2)=0 THEN 10 ELSE 0 END,\n       CASE WHEN (i.order_num BETWEEN 9125 AND 9132 AND serials.n=1) OR i.order_num BETWEEN 9133 AND 9136 OR (i.order_num>=9137 AND MOD(i.order_num+serials.n,2)=0) THEN 1003 ELSE 0 END,\n       CASE WHEN (i.order_num BETWEEN 9125 AND 9132 AND serials.n=1) OR i.order_num BETWEEN 9133 AND 9136 OR (i.order_num>=9137 AND MOD(i.order_num+serials.n,2)=0) THEN '打包员演示' ELSE '' END,\n       CASE WHEN (i.order_num BETWEEN 9125 AND 9132 AND serials.n=1) OR i.order_num BETWEEN 9133 AND 9136 OR (i.order_num>=9137 AND MOD(i.order_num+serials.n,2)=0) THEN 1003 ELSE 0 END,\n       CASE WHEN (i.order_num BETWEEN 9125 AND 9132 AND serials.n=1) OR i.order_num BETWEEN 9133 AND 9136 OR (i.order_num>=9137 AND MOD(i.order_num+serials.n,2)=0) THEN '打包员演示' ELSE '' END,\n       CASE WHEN (i.order_num BETWEEN 9125 AND 9132 AND serials.n=1) OR i.order_num BETWEEN 9133 AND 9136 OR (i.order_num>=9137 AND MOD(i.order_num+serials.n,2)=0) THEN '[\"/uploads/packing/demo-package.jpg\"]' ELSE '' END,\n       CASE WHEN (i.order_num BETWEEN 9125 AND 9132 AND serials.n=1) OR i.order_num BETWEEN 9133 AND 9136 OR (i.order_num>=9137 AND MOD(i.order_num+serials.n,2)=0) THEN NOW() ELSE NULL END,\n       CASE WHEN MOD(i.order_num+serials.n,3)=0 THEN 2 ELSE 1 END,CASE WHEN MOD(i.order_num+serials.n,3)=0 THEN '60×60加固箱' ELSE '标准鲜花箱' END,\n       CASE WHEN MOD(i.order_num+serials.n,3)=0 THEN 2 ELSE 1 END,CASE WHEN MOD(i.order_num+serials.n,3)=0 THEN '60×60加固箱' ELSE '标准鲜花箱' END,1,NOW(),NOW(),0\nFROM xm_bulky_supplier_enter_item i JOIN serials\nWHERE i.date='2026-09-20' AND i.supplier_id=9401 AND i.order_num>=9117\nAND NOT EXISTS (SELECT 1 FROM xm_bulky_wms_express_package p WHERE p.round_no='2026-09-20' AND p.shelf_sn=i.order_num AND p.serial_num=serials.n AND p.data_status=0)"
+  },
+  {
+    "file": "009_pack_detail_demo_enrichment.sql",
+    "sql": "UPDATE xm_bulky_wms_express_package AS sqlite_target SET suggest_pack_id=(SELECT suggested.id FROM xm_bulky_wms_express_package AS p JOIN xm_bulky_pack_config AS suggested ON suggested.id = CASE (p.shelf_sn + p.serial_num) % 5 WHEN 0 THEN 7 WHEN 1 THEN 13 WHEN 2 THEN 14 WHEN 3 THEN 15 ELSE 11 END LEFT JOIN xm_bulky_pack_config AS actual ON actual.id = CASE WHEN (p.shelf_sn + p.serial_num) % 4 = 0 THEN 17 ELSE suggested.id END WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status = 0)),suggest_pack_info=(SELECT suggested.pack_name FROM xm_bulky_wms_express_package AS p JOIN xm_bulky_pack_config AS suggested ON suggested.id = CASE (p.shelf_sn + p.serial_num) % 5 WHEN 0 THEN 7 WHEN 1 THEN 13 WHEN 2 THEN 14 WHEN 3 THEN 15 ELSE 11 END LEFT JOIN xm_bulky_pack_config AS actual ON actual.id = CASE WHEN (p.shelf_sn + p.serial_num) % 4 = 0 THEN 17 ELSE suggested.id END WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status = 0)),package_id=(SELECT CASE WHEN p.express_status >= 10 THEN actual.id ELSE 0 END FROM xm_bulky_wms_express_package AS p JOIN xm_bulky_pack_config AS suggested ON suggested.id = CASE (p.shelf_sn + p.serial_num) % 5 WHEN 0 THEN 7 WHEN 1 THEN 13 WHEN 2 THEN 14 WHEN 3 THEN 15 ELSE 11 END LEFT JOIN xm_bulky_pack_config AS actual ON actual.id = CASE WHEN (p.shelf_sn + p.serial_num) % 4 = 0 THEN 17 ELSE suggested.id END WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status = 0)),package_info=(SELECT CASE WHEN p.express_status >= 10 THEN actual.pack_name ELSE '' END FROM xm_bulky_wms_express_package AS p JOIN xm_bulky_pack_config AS suggested ON suggested.id = CASE (p.shelf_sn + p.serial_num) % 5 WHEN 0 THEN 7 WHEN 1 THEN 13 WHEN 2 THEN 14 WHEN 3 THEN 15 ELSE 11 END LEFT JOIN xm_bulky_pack_config AS actual ON actual.id = CASE WHEN (p.shelf_sn + p.serial_num) % 4 = 0 THEN 17 ELSE suggested.id END WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status = 0)),update_time=(SELECT NOW() FROM xm_bulky_wms_express_package AS p JOIN xm_bulky_pack_config AS suggested ON suggested.id = CASE (p.shelf_sn + p.serial_num) % 5 WHEN 0 THEN 7 WHEN 1 THEN 13 WHEN 2 THEN 14 WHEN 3 THEN 15 ELSE 11 END LEFT JOIN xm_bulky_pack_config AS actual ON actual.id = CASE WHEN (p.shelf_sn + p.serial_num) % 4 = 0 THEN 17 ELSE suggested.id END WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status = 0)) WHERE EXISTS(SELECT 1 FROM xm_bulky_wms_express_package AS p JOIN xm_bulky_pack_config AS suggested ON suggested.id = CASE (p.shelf_sn + p.serial_num) % 5 WHEN 0 THEN 7 WHEN 1 THEN 13 WHEN 2 THEN 14 WHEN 3 THEN 15 ELSE 11 END LEFT JOIN xm_bulky_pack_config AS actual ON actual.id = CASE WHEN (p.shelf_sn + p.serial_num) % 4 = 0 THEN 17 ELSE suggested.id END WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status = 0))"
+  },
+  {
+    "file": "009_pack_detail_demo_enrichment.sql",
+    "sql": "UPDATE xm_bulky_wms_express_package AS sqlite_target SET package_user_id=(SELECT a.id FROM xm_bulky_wms_express_package AS p, wms_account AS a JOIN wms_role AS r ON r.id = a.role_id AND r.code = 'packer' WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.express_status >= 10 AND p.data_status = 0 AND a.status = 1)),package_user_name=(SELECT a.display_name FROM xm_bulky_wms_express_package AS p, wms_account AS a JOIN wms_role AS r ON r.id = a.role_id AND r.code = 'packer' WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.express_status >= 10 AND p.data_status = 0 AND a.status = 1)),express_user_id=(SELECT a.id FROM xm_bulky_wms_express_package AS p, wms_account AS a JOIN wms_role AS r ON r.id = a.role_id AND r.code = 'packer' WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.express_status >= 10 AND p.data_status = 0 AND a.status = 1)),express_user_name=(SELECT a.display_name FROM xm_bulky_wms_express_package AS p, wms_account AS a JOIN wms_role AS r ON r.id = a.role_id AND r.code = 'packer' WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.express_status >= 10 AND p.data_status = 0 AND a.status = 1)),update_time=(SELECT NOW() FROM xm_bulky_wms_express_package AS p, wms_account AS a JOIN wms_role AS r ON r.id = a.role_id AND r.code = 'packer' WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.express_status >= 10 AND p.data_status = 0 AND a.status = 1)) WHERE EXISTS(SELECT 1 FROM xm_bulky_wms_express_package AS p, wms_account AS a JOIN wms_role AS r ON r.id = a.role_id AND r.code = 'packer' WHERE p.rowid=sqlite_target.rowid AND (p.round_no = '2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.express_status >= 10 AND p.data_status = 0 AND a.status = 1))"
+  },
+  {
+    "file": "009_pack_detail_demo_enrichment.sql",
+    "sql": "INSERT INTO xm_bulky_send_order\n  (ware_id,partner_id,send_no,round_no,purchaser_id,order_num,ware_sn,shelf_sn,sub_shelf_sn,zone,shelf,zone_shelf,delivery_type,config_id,express_region,receive_name,receive_tel,province,city,district,detail,receive_address,remark,logistics_remark,create_time,update_time,data_status)\nSELECT 1,0,p.send_no,'2026-09-20',0,p.shelf_sn,p.serial_num,p.shelf_sn,'',p.zone,p.shelf,p.zone_shelf,IF(p.self_take_type>0,2,1),1,1,CONCAT('演示收货人',MOD(p.shelf_sn,10)),CONCAT('1357609',LPAD(MOD(p.shelf_sn*10+p.serial_num,10000),4,'0')),'云南省','昆明市',ELT(1+MOD(p.shelf_sn,5),'西山区','盘龙区','五华区','官渡区','呈贡区'),CONCAT('演示鲜花门店 ',p.zone_shelf),CONCAT('云南省昆明市',ELT(1+MOD(p.shelf_sn,5),'西山区','盘龙区','五华区','官渡区','呈贡区'),'演示鲜花门店 ',p.zone_shelf),CASE WHEN MOD(p.shelf_sn,6)=0 THEN '轻拿轻放，优先装车' ELSE '' END,CASE p.express_type WHEN 1 THEN '早班优先出库' WHEN 2 THEN '普通班次' ELSE '' END,NOW(),NOW(),0\nFROM xm_bulky_wms_express_package p WHERE p.round_no='2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status=0\nAND NOT EXISTS (SELECT 1 FROM xm_bulky_send_order s WHERE s.send_no=p.send_no)"
+  },
+  {
+    "file": "009_pack_detail_demo_enrichment.sql",
+    "sql": "INSERT INTO xm_bulky_order_info (order_sn,send_no,api_order_sn,has_cotton,cotton_info,promote_merchant_flag,create_time,update_time)\nSELECT CONCAT('LOCAL-ORDER-',p.shelf_sn,'-',p.serial_num),p.send_no,'',IF(MOD(p.shelf_sn,4)=0,1,0),JSON_OBJECT('cottonNum',IF(MOD(p.shelf_sn,4)=0,2,0),'boardNum',IF(MOD(p.shelf_sn,4)=0,1,0),'bagNum',IF(MOD(p.shelf_sn,8)=0,1,0)),0,NOW(),NOW()\nFROM xm_bulky_wms_express_package p WHERE p.round_no='2026-09-20' AND p.shelf_sn BETWEEN 9117 AND 9140 AND p.data_status=0\nAND NOT EXISTS (SELECT 1 FROM xm_bulky_order_info oi WHERE oi.send_no=p.send_no)"
+  },
+  {
+    "file": "20260917_add_quality_punish_config.sql",
+    "sql": "INSERT INTO `xm_quality_punish_config` (`operation`,`operation_name`,`punish_percent`,`description`) VALUES\n  (1,'降一级',30,'降一级处罚：本金 × 30%'),\n  (2,'降两级',50,'降两级处罚：本金 × 50%'),\n  (3,'退货不补',15,'退货不补处罚：本金 × 15%'),\n  (5,'退货补货',15,'退货补货处罚：本金 × 15%'),\n  (6,'缺货补货',300,'缺货补货处罚：本金 × 300%'),\n  (7,'缺货不补',300,'缺货不补处罚：本金 × 300%'),\n  (12,'换货',0,'换货不产生处罚金额')\nON DUPLICATE KEY UPDATE `operation_name`=VALUES(`operation_name`),`punish_percent`=VALUES(`punish_percent`),`description`=VALUES(`description`),`data_status`=0"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT INTO wms_permission(code,name,domain_code) VALUES\n('quality.view','查看质检','quality'),('quality.scan','扫码质检','quality'),('quality.submit','提交质检','quality'),('quality.itemControl','质检业务标记','quality'),('quality.returnConfirm','退货确认','quality'),('quality.statistics','质检统计','quality'),\n('admission.view','查看入场','admission'),('admission.confirm','确认入场','admission'),('admission.scan','扫码入场','admission'),('admission.history','入场历史','admission'),('admission.statistics','入场统计','admission'),('admission.exception','入场异常','admission'),\n('distribution.view','查看配货','distribution'),('distribution.operate','执行配货','distribution'),('restock.view','查看补货','restock'),('restock.submit','提交补货','restock'),\n('inventory.view','查看库存','inventory'),('inventory.inbound','库存入库','inventory'),('inventory.outbound','库存出库','inventory'),('nfc.use','使用NFC','inventory'),('staff.manage','人员权限管理','management')\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code)"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description) VALUES\n('quality_operator','花材质检作业','质检查看、扫码、标记与提交'),('quality_management','质检管理','质检统计与人员管理'),('admission_operator','入场作业','供应商及基地入场能力'),('distribution_operator','配货作业','配货查看与操作'),('restock_operator','补货作业','补货查看与提交'),('inventory_operator','库存作业','库存入出库与NFC')\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description)"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON\n(g.code='quality_operator' AND p.code IN ('quality.view','quality.scan','quality.submit','quality.itemControl','quality.returnConfirm')) OR\n(g.code='quality_management' AND p.code IN ('quality.statistics','staff.manage')) OR\n(g.code='admission_operator' AND p.domain_code='admission') OR\n(g.code='distribution_operator' AND p.domain_code='distribution') OR\n(g.code='restock_operator' AND p.domain_code='restock') OR\n(g.code='inventory_operator' AND p.domain_code='inventory')"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT INTO wms_role(code,name,description,workbench_cards_json,todo_ids_json,scan_operations_json,data_cards_json) VALUES\n('qualityInspector','质检员','执行花材质检及关联作业','[\"quality-session\"]','[\"quality-pending\"]','[\"admission-checkin\",\"quality-inspection\"]','[\"quality-overview\",\"quality-result\"]'),\n('qualityLeader','质检负责人','质检作业、统计及人员管理','[\"quality-session\"]','[\"quality-pending\"]','[\"quality-inspection\"]','[\"quality-overview\",\"quality-result\"]'),\n('baseAdmissionOfficer','基地入场员','负责基地入场作业','[\"admission-session\"]','[\"admission-pending\"]','[\"admission-checkin\"]','[\"admission-overview\"]'),\n('warehouseManager','仓库管理员','负责库存入出库','[\"inventory-session\"]','[\"inventory-inbound\"]','[\"inventory-inbound\"]','[\"inventory-overview\",\"inventory-progress\"]')\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description)"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON\n(r.code='qualityInspector' AND g.code IN ('quality_operator','admission_operator','distribution_operator','restock_operator')) OR\n(r.code='qualityLeader' AND g.code IN ('quality_operator','quality_management','admission_operator','distribution_operator','restock_operator')) OR\n(r.code='baseAdmissionOfficer' AND g.code='admission_operator') OR\n(r.code='warehouseManager' AND g.code='inventory_operator')"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name)\nSELECT 'quality','13800001001','李师傅','mh_quality_2026',SHA2(CONCAT('mh_quality_2026','123456'),256),id,'梦花仓管' FROM wms_role WHERE code='qualityInspector'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id)"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name)\nSELECT 'quality_leader','13800001002','王主管','mh_leader_2026',SHA2(CONCAT('mh_leader_2026','123456'),256),id,'梦花仓管' FROM wms_role WHERE code='qualityLeader'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id)"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name)\nSELECT 'admission','13800001003','张师傅','mh_admit_2026',SHA2(CONCAT('mh_admit_2026','123456'),256),id,'梦花仓管' FROM wms_role WHERE code='baseAdmissionOfficer'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id)"
+  },
+  {
+    "file": "20260918_wms_auth_foundation.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name)\nSELECT 'warehouse','13800001004','赵师傅','mh_warehouse_2026',SHA2(CONCAT('mh_warehouse_2026','123456'),256),id,'梦花仓管' FROM wms_role WHERE code='warehouseManager'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id)"
+  },
+  {
+    "file": "20260918_add_cold_storage_permissions.sql",
+    "sql": "INSERT INTO wms_permission(code,name,domain_code,description) VALUES\n('coldStorage.view','查看冷库暂存','cold-storage','查看暂存库存与出库任务'),\n('coldStorage.registerBare','登记裸花暂存','cold-storage','扫码登记裸花冷库暂存'),\n('coldStorage.finishOut','完成冷库出库','cold-storage','确认冷库出库并上传凭证')\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),description=VALUES(description)"
+  },
+  {
+    "file": "20260918_add_cold_storage_permissions.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description) VALUES\n('cold_storage_operator','冷库暂存作业','冷库暂存查看、裸花登记与出库确认')\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description)"
+  },
+  {
+    "file": "20260918_add_cold_storage_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON g.code='cold_storage_operator' AND p.domain_code='cold-storage'"
+  },
+  {
+    "file": "20260918_add_cold_storage_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g\nWHERE r.code IN ('qualityInspector','qualityLeader') AND g.code='cold_storage_operator'"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "INSERT INTO wms_permission(code,name,domain_code,description) VALUES\n('collection.view','查看集货','collection','查看集货任务与汇总'),('collection.operate','执行集货','collection','确认集货数量与异常'),\n('transport.view','查看运输','transport','查看车辆与运输任务'),('transport.dispatch','运输调度','transport','车辆配置、装车和发车'),('transport.drive','司机作业','transport','司机签到、装车与在途操作'),\n('packing.view','查看打包','packing','查看打包任务'),('packing.operate','执行打包','packing','包花、装箱与复核'),\n('logistics.view','查看物流','logistics','查看物流及发货任务'),('logistics.operate','执行物流','logistics','揽收、拍照与发货'),('logistics.assign','物流调度','logistics','分配物流人员与任务'),\n('management.view','查看管理数据','management','查看人员、配置与审计'),('management.configure','管理系统配置','management','维护账户、角色与业务配置'),\n('quality.revoke','撤销质检标记','quality','撤销当前有效质检标记'),('distribution.cancelAllocation','取消配货','distribution','取消已确认的配货'),\n('restock.history','查看补货历史','restock','查看补货单历史'),('inventory.manage','管理库存','inventory','盘点、物资及库存配置')\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),description=VALUES(description)"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description) VALUES\n('collection_operator','集货作业','集货查看与操作'),('transport_dispatcher','运输调度','运输查看与调度'),('driver_operator','司机作业','司机运输作业'),\n('packing_operator','打包作业','打包查看与执行'),('logistics_operator','物流作业','物流查看与执行'),('logistics_management','物流管理','物流任务分配'),\n('patrol_operator','巡察作业','质检查看、提交、撤销与统计'),('warehouse_management','仓库管理','库存、冷库及物资管理'),\n('system_management','系统管理','账户、角色、权限和业务配置')\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description)"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON\n(g.code='collection_operator' AND p.domain_code='collection') OR\n(g.code='transport_dispatcher' AND p.code IN ('transport.view','transport.dispatch')) OR\n(g.code='driver_operator' AND p.code IN ('transport.view','transport.drive')) OR\n(g.code='packing_operator' AND p.domain_code='packing') OR\n(g.code='logistics_operator' AND p.code IN ('logistics.view','logistics.operate')) OR\n(g.code='logistics_management' AND p.domain_code='logistics') OR\n(g.code='patrol_operator' AND p.code IN ('quality.view','quality.scan','quality.submit','quality.revoke','quality.statistics')) OR\n(g.code='warehouse_management' AND p.code IN ('inventory.view','inventory.inbound','inventory.outbound','inventory.manage','nfc.use','coldStorage.view','coldStorage.registerBare','coldStorage.finishOut')) OR\n(g.code='system_management' AND p.code IN ('staff.manage','management.view','management.configure'))"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "INSERT INTO wms_role(code,name,description,workbench_cards_json,todo_ids_json,scan_operations_json,data_cards_json) VALUES\n('siteAdmin','场地管理员','仓管端全部业务与管理能力','[\"admission-session\",\"quality-session\",\"inventory-session\"]','[\"admission-pending\",\"quality-pending\",\"inventory-inbound\"]','[\"admission-checkin\",\"quality-inspection\",\"inventory-inbound\",\"inventory-outbound\"]','[\"admission-overview\",\"quality-overview\",\"quality-result\",\"inventory-overview\",\"inventory-progress\"]'),\n('regionalManager','大区负责人','跨分区仓内业务管理','[\"quality-session\"]','[\"quality-pending\"]','[]','[\"quality-overview\",\"quality-result\"]'),\n('zoneSupervisor','分区主管','负责分区质检、配货和打包','[\"quality-session\"]','[\"quality-pending\"]','[\"quality-inspection\"]','[\"quality-overview\"]'),\n('patrolInspector','巡察员','巡察质检和业务处罚','[\"quality-session\"]','[\"quality-pending\"]','[\"quality-inspection\"]','[\"quality-overview\",\"quality-result\"]'),\n('picker','配货员','执行货架配货与异常补货','[]','[]','[]','[]'),\n('packer','打包员','执行包花、装箱和复核','[]','[]','[]','[]'),\n('logisticsSpecialist','物流专员','执行揽收、发货与运输协作','[]','[]','[]','[]'),\n('driver','司机','执行装车、发车和在途作业','[]','[]','[]','[]'),\n('baseRegionLeader','基地片区负责人','管理基地集货、入场和运输','[\"admission-session\"]','[\"admission-pending\"]','[\"admission-checkin\"]','[\"admission-overview\"]'),\n('baseStationStaff','基地驻场','执行基地集货和入场','[\"admission-session\"]','[\"admission-pending\"]','[\"admission-checkin\"]','[]')\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),workbench_cards_json=VALUES(workbench_cards_json),todo_ids_json=VALUES(todo_ids_json),scan_operations_json=VALUES(scan_operations_json),data_cards_json=VALUES(data_cards_json)"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON\n(r.code='siteAdmin') OR\n(r.code='regionalManager' AND g.code IN ('collection_operator','transport_dispatcher','quality_operator','quality_management','distribution_operator','packing_operator','logistics_management')) OR\n(r.code='zoneSupervisor' AND g.code IN ('quality_operator','distribution_operator','restock_operator','packing_operator','logistics_operator')) OR\n(r.code='patrolInspector' AND g.code IN ('patrol_operator')) OR\n(r.code='picker' AND g.code='distribution_operator') OR\n(r.code='packer' AND g.code='packing_operator') OR\n(r.code='logisticsSpecialist' AND g.code IN ('logistics_management','transport_dispatcher','packing_operator')) OR\n(r.code='driver' AND g.code='driver_operator') OR\n(r.code='warehouseManager' AND g.code='warehouse_management') OR\n(r.code='baseRegionLeader' AND g.code IN ('admission_operator','collection_operator','transport_dispatcher')) OR\n(r.code='baseStationStaff' AND g.code IN ('admission_operator','collection_operator'))"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "DELETE FROM wms_role_permission_group AS sqlite_target WHERE EXISTS(SELECT 1 FROM wms_role_permission_group AS rg JOIN wms_role AS r ON r.id = rg.role_id AND r.code = 'picker' JOIN wms_permission_group AS g ON g.id = rg.group_id AND g.code = 'restock_operator' WHERE rg.rowid=sqlite_target.rowid)"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON\n(g.code='quality_operator' AND p.code='quality.revoke') OR\n(g.code='distribution_operator' AND p.code='distribution.cancelAllocation') OR\n(g.code='restock_operator' AND p.code='restock.history')"
+  },
+  {
+    "file": "20260920_expand_wms_roles_accounts.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name)\nSELECT CONCAT('demo_',r.code),CONCAT('1399',LPAD(r.id,7,'0')),r.name,CONCAT('wms_',r.code),SHA2(CONCAT('wms_',r.code,'123456'),256),r.id,'梦花仓管'\nFROM wms_role r\nWHERE r.code IN ('siteAdmin','regionalManager','zoneSupervisor','qualityInspector','qualityLeader','patrolInspector','picker','packer','logisticsSpecialist','driver','warehouseManager','baseRegionLeader','baseStationStaff','baseAdmissionOfficer')\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id),warehouse_name=VALUES(warehouse_name),status=1"
+  },
+  {
+    "file": "20260920_split_quality_entry_permissions.sql",
+    "sql": "INSERT INTO wms_permission(code,name,domain_code,description) VALUES\n('quality.flower.view','查看花材质检','quality','查看供应商花材和逐扎质检数据'),\n('quality.task.view','查看质检任务','quality-task','查看派发任务、自行货位检查和视频任务'),\n('quality.task.submit','提交质检任务','quality-task','提交派发质检任务的处理结果'),\n('quality.task.video.submit','提交好花视频','quality-task','扫码、上传并提交好花视频任务')\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260920_split_quality_entry_permissions.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description) VALUES\n('quality_operator','花材质检作业','花材质检查看、扫码、问题标记、业务控制、提交与撤销'),\n('quality_task_operator','质检任务作业','质检任务查看、任务提交和好花视频提交')\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260920_split_quality_entry_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON\n(g.code='quality_operator' AND p.code='quality.flower.view') OR\n(g.code='quality_task_operator' AND p.code IN ('quality.task.view','quality.task.submit','quality.task.video.submit'))"
+  },
+  {
+    "file": "20260920_split_quality_entry_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g\nWHERE r.code IN ('siteAdmin','regionalManager','zoneSupervisor','qualityInspector','qualityLeader','patrolInspector')\n  AND g.code='quality_task_operator'"
+  },
+  {
+    "file": "20260920_split_quality_entry_permissions.sql",
+    "sql": "DELETE FROM wms_role_permission_group AS sqlite_target WHERE EXISTS(SELECT 1 FROM wms_role_permission_group AS rpg JOIN wms_permission_group AS g ON g.id = rpg.group_id WHERE rpg.rowid=sqlite_target.rowid AND (g.code IN ('quality_flower_entry', 'quality_task_entry')))"
+  },
+  {
+    "file": "20260920_split_quality_entry_permissions.sql",
+    "sql": "DELETE FROM wms_permission_group_item AS sqlite_target WHERE EXISTS(SELECT 1 FROM wms_permission_group_item AS pgi JOIN wms_permission_group AS g ON g.id = pgi.group_id WHERE pgi.rowid=sqlite_target.rowid AND (g.code IN ('quality_flower_entry', 'quality_task_entry')))"
+  },
+  {
+    "file": "20260920_split_quality_entry_permissions.sql",
+    "sql": "DELETE FROM wms_permission_group WHERE code IN ('quality_flower_entry','quality_task_entry')"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "INSERT INTO wms_permission (code,name,domain_code,description)\nVALUES ('distribution.unfinished.view','查看未配货汇总','distribution','查看配货作业中的未配货汇总')\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item (group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g,wms_permission p\nWHERE g.code='distribution_operator' AND p.code='distribution.unfinished.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "INSERT INTO wms_permission (code,name,domain_code,description)\nVALUES ('distribution.mine.view','查看我的配货','distribution','查看当前账号在所选场次完成的配货记录')\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "INSERT INTO wms_permission_group (code,name,description,status)\nVALUES ('distribution_personal','我的配货','查看本人配货记录',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item (group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g,wms_permission p\nWHERE g.code='distribution_personal' AND p.code='distribution.mine.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group (role_id,group_id)\nSELECT r.id,g.id FROM wms_role r,wms_permission_group g\nWHERE r.code='picker' AND g.code='distribution_personal'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission\nSET parent_id=0, permission_type=2, route_path='', icon='', sort_order=0"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/admission/pages/home/index',icon='fwms-checkin-outline',sort_order=10 WHERE code='admission.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='',icon='fwms-collection-outline',sort_order=20 WHERE code='collection.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='',icon='fwms-truck-outline',sort_order=30 WHERE code='transport.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/quality/pages/suppliers/index',icon='fwms-inspection-outline',sort_order=40 WHERE code='quality.flower.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/quality/pages/tasks/index',icon='fwms-task-outline',sort_order=50 WHERE code='quality.task.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/distribution/pages/home/index',icon='fwms-picking-outline',sort_order=60 WHERE code='distribution.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/restock/pages/home/index',icon='fwms-replenishment-outline',sort_order=70 WHERE code='restock.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/packing/pages/home/index',icon='fwms-packing-outline',sort_order=80 WHERE code='packing.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/pages/home/index',icon='fwms-warehouse-outline',sort_order=90 WHERE code='inventory.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/cold-storage/pages/home/index',icon='fwms-cold-storage-outline',sort_order=100 WHERE code='coldStorage.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='',icon='fwms-outbound-outline',sort_order=110 WHERE code='logistics.view'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission SET permission_type=1,route_path='/features/management/pages/staff/index',icon='fwms-account-outline',sort_order=140 WHERE code='staff.manage'"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'admission.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'admission' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'admission.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'admission' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'collection.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'collection' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'collection.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'collection' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'transport.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'transport' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'transport.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'transport' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'quality.flower.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'quality' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'quality.flower.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'quality' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'quality.task.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'quality-task' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'quality.task.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'quality-task' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'distribution.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'distribution' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'distribution.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'distribution' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'restock.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'restock' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'restock.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'restock' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'packing.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'packing' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'packing.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'packing' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'inventory.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'inventory' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'inventory.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'inventory' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'coldStorage.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'cold-storage' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'coldStorage.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'cold-storage' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'logistics.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'logistics' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'logistics.view' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'logistics' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_permission_tree.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent.id FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'staff.manage' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'management' AND child.id <> parent.id)) WHERE EXISTS(SELECT 1 FROM wms_permission AS child JOIN wms_permission AS parent ON parent.code = 'staff.manage' WHERE child.rowid=sqlite_target.rowid AND (child.domain_code = 'management' AND child.id <> parent.id))"
+  },
+  {
+    "file": "20260920_add_packing_statistics_permissions.sql",
+    "sql": "SET @packing_parent=(SELECT id FROM wms_permission WHERE code='packing.view' LIMIT 1)"
+  },
+  {
+    "file": "20260920_add_packing_statistics_permissions.sql",
+    "sql": "INSERT INTO wms_permission (parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES\n(@packing_parent,'packing.statistics.packaging','打包包装统计','packing',2,'查看包装箱型使用数量','','',320,1),\n(@packing_parent,'packing.statistics.zoneWeight','分区重量统计','packing',2,'查看分区货架数量与重量','','',321,1),\n(@packing_parent,'packing.statistics.income','打包收益统计','packing',2,'查看打包人员收益明细','','',322,1),\n(@packing_parent,'packing.statistics.cotton','保温棉统计','packing',2,'查看货架保温棉数量','','',323,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),parent_id=VALUES(parent_id),permission_type=VALUES(permission_type),description=VALUES(description),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260920_add_packing_statistics_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item (group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g CROSS JOIN wms_permission p\nWHERE g.code='packing_operator' AND p.code IN ('packing.statistics.packaging','packing.statistics.zoneWeight','packing.statistics.income','packing.statistics.cotton')"
+  },
+  {
+    "file": "20260920_grant_logistics_specialist.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group (role_id,group_id)\nSELECT r.id,g.id FROM wms_role r CROSS JOIN wms_permission_group g\nWHERE r.code='logisticsSpecialist' AND g.code='logistics_operator'"
+  },
+  {
+    "file": "20260920_import_pack_config.sql",
+    "sql": "INSERT INTO xm_bulky_pack_config\n  (id,pack_name,pack_weight,flower_weight,pack_price,labor_price,logistics_price,pic_url,remark,sort,wms_bind_flag)\nVALUES\n  (7,'天地盖小号（40*20）',15.00,10.00,8.00,5.00,0.30,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333951998158901.png','110*40*20 箱',0,1),\n  (28,'小件70*20箱',1.70,1.00,1.70,3.00,0.15,'','70*20箱',0,1),\n  (29,'小件90*17箱',3.50,2.50,2.00,3.00,0.15,'','小件90*17箱',0,1),\n  (13,'天地盖中号（40*25）',20.00,15.00,9.00,5.00,0.30,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333952051731929.png','110*40*25 箱',1,1),\n  (14,'天地盖大号（40*30）',30.00,22.00,11.00,5.00,0.30,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333952115619885.png','110*40*30 箱',2,1),\n  (15,'天地盖超大号（45*38）',38.00,30.00,12.00,7.00,0.30,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333952162481329.png','110*45*38 箱',3,1),\n  (16,'天地盖最大号（45*45）',45.00,39.10,13.00,10.00,0.30,'https://img-bulky.xunmengvip.com/xmbulky/refund/2026/7/2/17829772583777750.png','110*45*45 箱',3,1),\n  (10,'110*45*45箱',50.00,0.00,11.50,14.00,0.30,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333952305229183.png','110*45*45 箱',4,1),\n  (11,'110*50*50箱',60.00,52.20,12.80,14.00,0.50,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/1733395248095165.png','110*50*50 箱',5,1),\n  (17,'110*50*60箱',65.00,56.50,15.00,21.00,0.50,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333952551442073.png','110*50*60',6,1),\n  (12,'110*60*60箱',80.00,69.60,24.00,21.00,0.50,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333952612902764.png','110*60*60 箱',7,1),\n  (26,'100*25箱',10.00,7.00,4.40,3.00,0.15,'','100*25',8,1),\n  (25,'90*20箱',6.00,4.00,3.00,3.00,0.15,'','90*20',10,1),\n  (20,'蝴蝶兰',4.00,1.00,0.00,0.00,0.00,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333950687505534.png','100*30*15',11,1),\n  (19,'蓝妖',2.00,1.00,0.00,0.00,0.00,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/5/17333950504103692.png','100*10*15',12,1),\n  (24,'框子',39.00,0.00,0.00,0.00,0.30,'','其他',13,1),\n  (21,'其他',7.00,0.00,0.00,0.00,0.00,'https://img-bulky.xunmengvip.com/xmbulky/refund/2024/12/6/17334669460003153.png','其他',14,0)\nON DUPLICATE KEY UPDATE\n  pack_name=VALUES(pack_name),pack_weight=VALUES(pack_weight),flower_weight=VALUES(flower_weight),\n  pack_price=VALUES(pack_price),labor_price=VALUES(labor_price),logistics_price=VALUES(logistics_price),\n  pic_url=VALUES(pic_url),remark=VALUES(remark),sort=VALUES(sort),wms_bind_flag=VALUES(wms_bind_flag)"
+  },
+  {
+    "file": "20260920_normalize_business_domains.sql",
+    "sql": "INSERT INTO wms_business_domain(code,name,description,view_permission_code,icon,entry_path,sort_order) VALUES\n('admission','入场管理','基地入场、签到与到场状态','admission.view','fwms-checkin-outline','/features/admission/pages/home/index',10),\n('collection','集货','集货任务、数量确认与异常','collection.view','fwms-collection-outline','',20),\n('transport','运输','车辆、司机、线路与在途状态','transport.view','fwms-truck-outline','',30),\n('quality','花材质检','供应商花材逐扎质检','quality.flower.view','fwms-inspection-outline','/features/quality/pages/suppliers/index',40),\n('qualityTask','质检任务','派发任务、自行检查与好花视频','quality.task.view','fwms-task-outline','/features/quality/pages/tasks/index',50),\n('distribution','配货作业','分区配货、货架操作与换货','distribution.view','fwms-picking-outline','/features/distribution/pages/home/index',60),\n('restock','补货管理','补货需求、提交与历史','restock.view','fwms-replenishment-outline','/features/restock/pages/home/index',70),\n('packing','打包','打包任务、复核与包材','packing.view','fwms-packing-outline','',80),\n('inventory','库存','入库、出库、库存与物资','inventory.view','fwms-warehouse-outline','/pages/home/index',90),\n('coldStorage','冷库暂存','冷库暂存、出库与库存','coldStorage.view','fwms-cold-storage-outline','/features/cold-storage/pages/home/index',100),\n('logistics','物流发货','揽收、拍照、分配与发货','logistics.view','fwms-outbound-outline','',110),\n('consignment','代卖','收购、定级、上架与订单','','fwms-flower-bunch-outline','',120),\n('agriMaterial','农资','农资商品、订单与供应商','','fwms-parcel-outline','',130),\n('management','管理','人员、权限、统计与日志','staff.manage','fwms-account-outline','/features/management/pages/staff/index',140)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),view_permission_code=VALUES(view_permission_code),icon=VALUES(icon),entry_path=VALUES(entry_path),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260920_part_logistics_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES(0,'partLogistics.view','兼职物流员管理','part-logistics',1,'查看兼职物流员场次工作记录','/features/part-logistics/pages/home/index','fwms-account-outline',120,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),permission_type=1,description=VALUES(description),route_path=VALUES(route_path),icon=VALUES(icon),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260920_part_logistics_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT id,'partLogistics.assign','分配兼职物流组长','part-logistics',2,'批量分配兼职物流员的管理组长','','',10,1\nFROM wms_permission WHERE code='partLogistics.view'\nON DUPLICATE KEY UPDATE name=VALUES(name),parent_id=VALUES(parent_id),domain_code=VALUES(domain_code),permission_type=2,description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260920_part_logistics_domain.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nVALUES('part_logistics_management','兼职物流员管理','查看兼职物流员工作记录并分配管理组长',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260920_part_logistics_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g,wms_permission p\nWHERE g.code='part_logistics_management' AND p.code IN ('partLogistics.view','partLogistics.assign')"
+  },
+  {
+    "file": "20260920_part_logistics_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r,wms_permission_group g\nWHERE r.code IN ('siteAdmin','logisticsLeader','logisticsSpecialist') AND g.code='part_logistics_management'"
+  },
+  {
+    "file": "20260921_account_base_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_account_base_permission(account_id,base_tag_id,sort_order)\nSELECT a.id,t.id,t.id FROM wms_account a JOIN wms_role r ON r.id=a.role_id\nCROSS JOIN xm_bulky_user_tag t\nWHERE a.status=1 AND r.code IN('siteAdmin','baseAdmissionOfficer') AND t.type=2 AND t.tag_category='基地'"
+  },
+  {
+    "file": "20260921_agri_material_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(0,'agriMaterial.view','农资管理','agri-material',1,'查看农资订单及详情','/features/agri-material/pages/home/index','fwms-crate-outline',19,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),permission_type=1,description=VALUES(description),route_path=VALUES(route_path),icon=VALUES(icon),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260921_agri_material_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT id,'agriMaterial.print','打印农资标签','agri-material',2,'查看农资标签数据并执行标签打印','','',10,1 FROM wms_permission WHERE code='agriMaterial.view'\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),domain_code=VALUES(domain_code),permission_type=2,description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_agri_material_domain.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status) VALUES('agri_material_operator','农资订单与标签','查看农资订单、详情并打印标签',1) ON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_agri_material_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id) SELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code IN('agriMaterial.view','agriMaterial.print') WHERE g.code='agri_material_operator'"
+  },
+  {
+    "file": "20260921_agri_material_domain.sql",
+    "sql": "INSERT INTO wms_role(code,name,description,workbench_cards_json,todo_ids_json,scan_operations_json,data_cards_json,status) VALUES('agriMaterialManager','农资管理员','管理农资订单与标签打印','[]','[]','[]','[]',1) ON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_agri_material_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id) SELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g WHERE r.code IN('agriMaterialManager','siteAdmin') AND g.code='agri_material_operator'"
+  },
+  {
+    "file": "20260921_agri_material_domain.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name,status)\nSELECT 'demo_agriMaterialManager','13990000015','冯晓东','wms_agriMaterialManager',SHA2('wms_agriMaterialManager123456',256),id,'梦花仓管',1 FROM wms_role WHERE code='agriMaterialManager'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id),warehouse_name=VALUES(warehouse_name),status=1"
+  },
+  {
+    "file": "20260921_assign_hongta_outsource_manager.sql",
+    "sql": "INSERT INTO wms_account_source_identity(account_id,source_system,source_user_id)\nSELECT id,'bulkyGoods',990000009 FROM wms_account WHERE login_name='demo_siteAdmin'\nON DUPLICATE KEY UPDATE source_user_id=VALUES(source_user_id)"
+  },
+  {
+    "file": "20260921_assign_hongta_outsource_manager.sql",
+    "sql": "UPDATE xm_bulky_base_config\nSET outsource_flag=1,outsource_user_id=990000009,outsource_user_name='陈志强'\nWHERE id=14 AND name='红塔基地'"
+  },
+  {
+    "file": "20260921_base_management_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT 0,'baseManagement.view','基地管理','base-management',1,'查看基地、供应商及库存详情','/features/base-management/pages/home/index','fwms-warehouse-outline',15,1\nWHERE NOT EXISTS(SELECT 1 FROM wms_permission WHERE code='baseManagement.view')"
+  },
+  {
+    "file": "20260921_base_management_domain.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nSELECT 'base_management_viewer','基地管理','查看基地列表、基地详情和供应商库存详情',1\nWHERE NOT EXISTS(SELECT 1 FROM wms_permission_group WHERE code='base_management_viewer')"
+  },
+  {
+    "file": "20260921_base_management_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code='baseManagement.view' WHERE g.code='base_management_viewer'"
+  },
+  {
+    "file": "20260921_base_management_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code='base_management_viewer' WHERE r.code IN ('baseAdmissionOfficer','siteAdmin')"
+  },
+  {
+    "file": "20260921_base_outsource_income_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT parent_permission.id,'baseOutsourceIncome.view','基地包干收益','base-outsource-income',1,'查看当前账号承包基地的包干收益','/features/base-outsource-income/pages/home/index','fwms-warehouse-outline',17,1\nFROM wms_permission parent_permission\nWHERE parent_permission.code='baseManagement.view' AND NOT EXISTS(SELECT 1 FROM wms_permission WHERE code='baseOutsourceIncome.view')"
+  },
+  {
+    "file": "20260921_base_outsource_income_domain.sql",
+    "sql": "UPDATE wms_permission AS sqlite_target SET parent_id=(SELECT parent_permission.id FROM wms_permission AS child_permission JOIN wms_permission AS parent_permission ON parent_permission.code = 'baseManagement.view' WHERE child_permission.rowid=sqlite_target.rowid AND (child_permission.code = 'baseOutsourceIncome.view')),permission_type=(SELECT 1 FROM wms_permission AS child_permission JOIN wms_permission AS parent_permission ON parent_permission.code = 'baseManagement.view' WHERE child_permission.rowid=sqlite_target.rowid AND (child_permission.code = 'baseOutsourceIncome.view')) WHERE EXISTS(SELECT 1 FROM wms_permission AS child_permission JOIN wms_permission AS parent_permission ON parent_permission.code = 'baseManagement.view' WHERE child_permission.rowid=sqlite_target.rowid AND (child_permission.code = 'baseOutsourceIncome.view'))"
+  },
+  {
+    "file": "20260921_base_outsource_income_domain.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nSELECT 'base_outsource_income_viewer','基地包干收益','查看账号本人承包基地的月度包干收益',1\nWHERE NOT EXISTS(SELECT 1 FROM wms_permission_group WHERE code='base_outsource_income_viewer')"
+  },
+  {
+    "file": "20260921_base_outsource_income_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code='baseOutsourceIncome.view' WHERE g.code='base_outsource_income_viewer'"
+  },
+  {
+    "file": "20260921_base_outsource_income_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code='base_outsource_income_viewer' WHERE r.code='siteAdmin'"
+  },
+  {
+    "file": "20260921_base_return_domain.sql",
+    "sql": "INSERT INTO wms_permission\n  (parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES\n  (0,'baseReturn.view','基地退货','base-return',1,'查看基地退货二次确认列表','/features/base-return/pages/home/index','fwms-return-outline',18,1)\nON DUPLICATE KEY UPDATE\n  name=VALUES(name),domain_code=VALUES(domain_code),permission_type=VALUES(permission_type),\n  description=VALUES(description),route_path=VALUES(route_path),icon=VALUES(icon),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260921_base_return_domain.sql",
+    "sql": "INSERT INTO wms_permission\n  (parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT id,'baseReturn.confirm','扫码确认基地退货','base-return',2,'扫描花材标签并完成退货二次确认','','',10,1\nFROM wms_permission WHERE code='baseReturn.view'\nON DUPLICATE KEY UPDATE\n  parent_id=VALUES(parent_id),name=VALUES(name),domain_code=VALUES(domain_code),permission_type=VALUES(permission_type),\n  description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_base_return_domain.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nVALUES ('base_return_operator','基地退货确认作业','查看基地退货并进行扫码二次确认',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_base_return_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p\n  ON p.code IN ('baseReturn.view','baseReturn.confirm')\nWHERE g.code='base_return_operator'"
+  },
+  {
+    "file": "20260921_base_return_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g\nWHERE r.code IN ('qualityInspector','qualityLeader','siteAdmin') AND g.code='base_return_operator'"
+  },
+  {
+    "file": "20260921_base_return_domain.sql",
+    "sql": "DELETE FROM wms_permission_group_item AS sqlite_target WHERE EXISTS(SELECT 1 FROM wms_permission_group_item AS item JOIN wms_permission_group AS permission_group ON permission_group.id = item.group_id JOIN wms_permission AS permission ON permission.id = item.permission_id WHERE item.rowid=sqlite_target.rowid AND (permission_group.code = 'quality_operator' AND permission.code = 'quality.returnConfirm'))"
+  },
+  {
+    "file": "20260921_base_return_domain.sql",
+    "sql": "UPDATE wms_permission SET status=0 WHERE code='quality.returnConfirm'"
+  },
+  {
+    "file": "20260921_base_stocktaking_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT 0,'baseStocktaking.view','基地盘点','base-stocktaking',1,'按基地和场次查看供应商花材盘点数据','/features/base-stocktaking/pages/home/index','fwms-stocktake-outline',16,1\nWHERE NOT EXISTS(SELECT 1 FROM wms_permission WHERE code='baseStocktaking.view')"
+  },
+  {
+    "file": "20260921_base_stocktaking_domain.sql",
+    "sql": "UPDATE wms_permission SET icon='fwms-stocktake-outline',permission_type=1\nWHERE code='baseStocktaking.view'"
+  },
+  {
+    "file": "20260921_base_stocktaking_domain.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nSELECT 'base_stocktaking_viewer','基地盘点','查看基地供应商盘点汇总及花材盘点详情',1\nWHERE NOT EXISTS(SELECT 1 FROM wms_permission_group WHERE code='base_stocktaking_viewer')"
+  },
+  {
+    "file": "20260921_base_stocktaking_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code='baseStocktaking.view' WHERE g.code='base_stocktaking_viewer'"
+  },
+  {
+    "file": "20260921_base_stocktaking_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code='base_stocktaking_viewer'\nWHERE r.code IN ('baseAdmissionOfficer','siteAdmin')"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "UPDATE wms_permission SET name='纸箱管理',domain_code='cartonInventory',description='查看纸箱进销存',route_path='/features/carton-inventory/pages/home/index',icon='/static/icons/wms/fwms-inventory-outline.svg' WHERE code='inventory.view'"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "UPDATE wms_permission SET domain_code='cartonInventory',name='纸箱入库' WHERE code='inventory.inbound'"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "UPDATE wms_permission SET domain_code='cartonInventory',name='纸箱出库' WHERE code='inventory.outbound'"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "UPDATE wms_permission SET domain_code='cartonInventory',name='纸箱进销存管理' WHERE code='inventory.manage'"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "INSERT INTO wms_sku_inventory(part,category,sku_type,sku_name,specification,brand,entry_stock,unit,status_bind,operator_id,operator_name,last_operator_id,last_operator_name,status)\nVALUES\n('库房',1,1,'打包箱子','110*50*60','','480','个',1,9,'陈志强',9,'陈志强',0),\n('库房',1,1,'打包箱子','110*50*50','','1070','个',1,9,'陈志强',9,'陈志强',0),\n('库房',1,1,'打包箱子','110*45*45箱','','640','个',1,9,'陈志强',9,'陈志强',0),\n('库房',1,1,'打包箱子','天地盖大号（45*38）','','1708','个',1,9,'陈志强',9,'陈志强',0),\n('库房',1,1,'打包箱子','天地盖（40*30）','','1314','个',1,9,'陈志强',9,'陈志强',0),\n('库房',1,1,'打包箱子','天地盖大号（40*25）','','1659','个',1,9,'陈志强',9,'陈志强',0),\n('库房',1,1,'打包箱子','天地盖小号（40*20）','','1132','个',1,9,'陈志强',9,'陈志强',0),\n('库房',1,1,'打包箱子','小件（90*25）','','0','个',1,9,'陈志强',9,'陈志强',0)\nON DUPLICATE KEY UPDATE sku_name=VALUES(sku_name)"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "DELETE FROM wms_sku_inventory AS sqlite_target WHERE EXISTS(SELECT 1 FROM wms_sku_inventory AS duplicate_row JOIN wms_sku_inventory AS retained_row ON retained_row.part = duplicate_row.part AND retained_row.category = duplicate_row.category AND retained_row.specification = duplicate_row.specification AND retained_row.id < duplicate_row.id WHERE duplicate_row.rowid=sqlite_target.rowid AND (duplicate_row.category = 1 AND duplicate_row.part = '库房' AND duplicate_row.specification IN ('110*50*60', '110*50*50', '110*45*45箱', '天地盖大号（45*38）', '天地盖（40*30）', '天地盖大号（40*25）', '天地盖小号（40*20）', '小件（90*25）')))"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "INSERT INTO wms_material_apply(apply_no,team_id,team_name,sku_id,sku_name,specification,unit_name,apply_quantity,issued_quantity,status,applicant_id,applicant_name,auditor_id,auditor_name,audit_time,create_time)\nSELECT CONCAT('SL20260921',LPAD(s.id,3,'0')),107,'寻梦22-23区打包团队',s.id,s.sku_name,s.specification,s.unit,44,44,20,13,'袁高',9,'李江涛','2026-09-21 03:55:21','2026-09-21 03:49:38' FROM wms_sku_inventory s WHERE s.specification='天地盖（40*30）' AND NOT EXISTS(SELECT 1 FROM wms_material_apply WHERE apply_no=CONCAT('SL20260921',LPAD(s.id,3,'0')))"
+  },
+  {
+    "file": "20260921_carton_inventory_seed.sql",
+    "sql": "INSERT INTO wms_material_apply(apply_no,team_id,team_name,sku_id,sku_name,specification,unit_name,apply_quantity,status,applicant_id,applicant_name,create_time)\nSELECT CONCAT('SL20260922',LPAD(s.id,3,'0')),108,'寻梦7-11区打包组',s.id,s.sku_name,s.specification,s.unit,80,10,13,'王明','2026-09-21 08:20:00' FROM wms_sku_inventory s WHERE s.specification='天地盖大号（45*38）' AND NOT EXISTS(SELECT 1 FROM wms_material_apply WHERE apply_no=CONCAT('SL20260922',LPAD(s.id,3,'0')))"
+  },
+  {
+    "file": "20260921_distribution_staff_accounts.sql",
+    "sql": "INSERT INTO wms_role(code,name,description,workbench_cards_json,todo_ids_json,scan_operations_json,data_cards_json,status) VALUES\n('partTimePicker','兼职配货员','按授权分区执行临时配货作业','[]','[]','[]','[]',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_distribution_staff_accounts.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g\nWHERE r.code='partTimePicker' AND g.code='distribution_operator'"
+  },
+  {
+    "file": "20260921_distribution_staff_accounts.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name,status)\nSELECT seed.login_name,seed.phone,seed.display_name,seed.salt,SHA2(CONCAT(seed.salt,'123456'),256),r.id,'梦花仓管',1\nFROM (\n  SELECT 'picker_chenyu' login_name,'13810002001' phone,'陈宇' display_name,'picker_chenyu_2026' salt,'picker' role_code UNION ALL\n  SELECT 'picker_liujie','13810002002','刘杰','picker_liujie_2026','picker' UNION ALL\n  SELECT 'picker_zhangqiang','13810002003','张强','picker_zhangqiang_2026','picker' UNION ALL\n  SELECT 'picker_wanghao','13810002004','王浩','picker_wanghao_2026','picker' UNION ALL\n  SELECT 'picker_lina','13810002005','李娜','picker_lina_2026','picker' UNION ALL\n  SELECT 'part_picker_zhouyang','13810002101','周洋','part_picker_zhouyang_2026','partTimePicker' UNION ALL\n  SELECT 'part_picker_sunlei','13810002102','孙磊','part_picker_sunlei_2026','partTimePicker' UNION ALL\n  SELECT 'part_picker_wuqian','13810002103','吴倩','part_picker_wuqian_2026','partTimePicker' UNION ALL\n  SELECT 'part_picker_heming','13810002104','何明','part_picker_heming_2026','partTimePicker' UNION ALL\n  SELECT 'part_picker_zhengjie','13810002105','郑洁','part_picker_zhengjie_2026','partTimePicker' UNION ALL\n  SELECT 'part_picker_gaofeng','13810002106','高峰','part_picker_gaofeng_2026','partTimePicker' UNION ALL\n  SELECT 'part_picker_xuting','13810002107','徐婷','part_picker_xuting_2026','partTimePicker' UNION ALL\n  SELECT 'part_picker_luocheng','13810002108','罗成','part_picker_luocheng_2026','partTimePicker'\n) seed JOIN wms_role r ON r.code=seed.role_code\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id),warehouse_name=VALUES(warehouse_name),status=1"
+  },
+  {
+    "file": "20260921_distribution_staff_accounts.sql",
+    "sql": "INSERT IGNORE INTO wms_account_distribution_area(account_id,zone_code)\nSELECT a.id,z.zone_code FROM wms_account a JOIN (\n  SELECT 'picker_chenyu' login_name,'1' zone_code UNION ALL SELECT 'picker_chenyu','2' UNION ALL SELECT 'picker_chenyu','3' UNION ALL\n  SELECT 'picker_liujie','4' UNION ALL SELECT 'picker_liujie','5' UNION ALL SELECT 'picker_liujie','6' UNION ALL\n  SELECT 'picker_zhangqiang','7' UNION ALL SELECT 'picker_zhangqiang','8' UNION ALL SELECT 'picker_zhangqiang','9' UNION ALL\n  SELECT 'picker_wanghao','10' UNION ALL SELECT 'picker_wanghao','11' UNION ALL SELECT 'picker_wanghao','12' UNION ALL\n  SELECT 'picker_lina','13' UNION ALL SELECT 'picker_lina','14' UNION ALL SELECT 'picker_lina','15' UNION ALL\n  SELECT 'part_picker_zhouyang','1' UNION ALL SELECT 'part_picker_zhouyang','6' UNION ALL SELECT 'part_picker_sunlei','2' UNION ALL SELECT 'part_picker_sunlei','7' UNION ALL\n  SELECT 'part_picker_wuqian','3' UNION ALL SELECT 'part_picker_wuqian','8' UNION ALL SELECT 'part_picker_heming','4' UNION ALL SELECT 'part_picker_heming','9' UNION ALL\n  SELECT 'part_picker_zhengjie','5' UNION ALL SELECT 'part_picker_zhengjie','10' UNION ALL SELECT 'part_picker_gaofeng','11' UNION ALL SELECT 'part_picker_gaofeng','12' UNION ALL\n  SELECT 'part_picker_xuting','13' UNION ALL SELECT 'part_picker_xuting','14' UNION ALL SELECT 'part_picker_luocheng','15' UNION ALL SELECT 'part_picker_luocheng','16'\n) z ON z.login_name=a.login_name"
+  },
+  {
+    "file": "20260921_distribution_team_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES\n(0,'teamAccount.view','团队账号','teamAccount',1,'查看本人负责的外包配货团队账号','/features/distribution-team/pages/accounts/index','/static/icons/wms/fwms-team-account-outline.svg',180,1),\n(0,'teamAccount.manage','团队账号管理','teamAccount',2,'绑定、创建、编辑、重置及启停本人团队账号','', '',181,1),\n(0,'teamDistribution.view','团队配货明细','teamDistribution',1,'查看本人负责团队的配货明细','/features/distribution-team/pages/statistics/index','/static/icons/wms/fwms-team-picking-outline.svg',182,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),permission_type=VALUES(permission_type),description=VALUES(description),route_path=VALUES(route_path),icon=VALUES(icon),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260921_distribution_team_domains.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nVALUES\n('team_account_manager','团队账号管理组','团队账号入口及账号管理能力',1),\n('team_distribution_viewer','团队配货明细查看组','团队配货明细入口及本人团队数据查看能力',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_distribution_team_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p\nWHERE (g.code='team_account_manager' AND p.code IN ('teamAccount.view','teamAccount.manage'))\n   OR (g.code='team_distribution_viewer' AND p.code='teamDistribution.view')"
+  },
+  {
+    "file": "20260921_distribution_team_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g\nWHERE r.code='siteAdmin' AND g.code IN ('team_account_manager','team_distribution_viewer')"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT INTO wms_account_source_identity(account_id,source_system,source_user_id)\nSELECT a.id,'bulkyGoods',991000000+a.id FROM wms_account a\nJOIN wms_role r ON r.id=a.role_id\nWHERE a.status=1 AND r.code IN('picker','partTimePicker')\nON DUPLICATE KEY UPDATE source_user_id=source_user_id"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT INTO xm_bulky_team(type,name,role_id,perm_config,people_num,leader_id,leader_name,charge_base,remark,active_flag,data_status)\nSELECT 2,'寻梦1-10区配货组',0,JSON_OBJECT('zones',JSON_ARRAY('01','02','03','04','05','06','07','08','09','10')),5,990000009,'陈志强','[]','新版仓管测试配货团队',1,0\nWHERE NOT EXISTS(SELECT 1 FROM xm_bulky_team WHERE type=2 AND name='寻梦1-10区配货组' AND data_status=0)"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT INTO xm_bulky_team(type,name,role_id,perm_config,people_num,leader_id,leader_name,charge_base,remark,active_flag,data_status)\nSELECT 2,'寻梦11-20区配货组',0,JSON_OBJECT('zones',JSON_ARRAY('11','12','13','14','15','16','17','18','19','20')),5,991000040,'陈宇','[]','新版仓管测试配货团队',1,0\nWHERE NOT EXISTS(SELECT 1 FROM xm_bulky_team WHERE type=2 AND name='寻梦11-20区配货组' AND data_status=0)"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT INTO xm_bulky_team(type,name,role_id,perm_config,people_num,leader_id,leader_name,charge_base,remark,active_flag,data_status)\nSELECT 2,'寻梦21-30区配货组',0,JSON_OBJECT('zones',JSON_ARRAY('21','22','23','24','25','26','27','28','29','30')),4,991000041,'刘杰','[]','新版仓管测试配货团队',1,0\nWHERE NOT EXISTS(SELECT 1 FROM xm_bulky_team WHERE type=2 AND name='寻梦21-30区配货组' AND data_status=0)"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT IGNORE INTO xm_bulky_team_user(user_id,user_name,is_sub,team_id)\nSELECT source.source_user_id,a.display_name,1,t.id FROM wms_account a\nJOIN wms_account_source_identity source ON source.account_id=a.id AND source.source_system='bulkyGoods'\nJOIN xm_bulky_team t ON t.name='寻梦1-10区配货组' AND t.type=2 AND t.data_status=0\nWHERE a.id IN(13,45,46,52)"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT IGNORE INTO xm_bulky_team_user(user_id,user_name,is_sub,team_id)\nSELECT 990000009,'陈志强',1,t.id FROM xm_bulky_team t\nWHERE t.name='寻梦1-10区配货组' AND t.type=2 AND t.data_status=0"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT IGNORE INTO xm_bulky_team_user(user_id,user_name,is_sub,team_id)\nSELECT source.source_user_id,a.display_name,1,t.id FROM wms_account a\nJOIN wms_account_source_identity source ON source.account_id=a.id AND source.source_system='bulkyGoods'\nJOIN xm_bulky_team t ON t.name='寻梦11-20区配货组' AND t.type=2 AND t.data_status=0\nWHERE a.id IN(40,42,47,48,49)"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT IGNORE INTO xm_bulky_team_user(user_id,user_name,is_sub,team_id)\nSELECT source.source_user_id,a.display_name,1,t.id FROM wms_account a\nJOIN wms_account_source_identity source ON source.account_id=a.id AND source.source_system='bulkyGoods'\nJOIN xm_bulky_team t ON t.name='寻梦21-30区配货组' AND t.type=2 AND t.data_status=0\nWHERE a.id IN(41,43,44,50)"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "INSERT INTO xm_bulky_external_distribution_contractor_account(contractor_user_id,employee_user_id,last_operator_id,data_status)\nSELECT 990000009,source.source_user_id,990000009,0 FROM wms_account_source_identity source\nWHERE source.source_system='bulkyGoods' AND source.account_id IN(13,45,46,52)\nON DUPLICATE KEY UPDATE data_status=0,last_operator_id=VALUES(last_operator_id),update_time=NOW()"
+  },
+  {
+    "file": "20260921_distribution_teams.sql",
+    "sql": "UPDATE xm_bulky_team t SET people_num=(SELECT COUNT(*) FROM xm_bulky_team_user u WHERE u.team_id=t.id)\nWHERE t.type=2 AND t.name IN('寻梦1-10区配货组','寻梦11-20区配货组','寻梦21-30区配货组')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT INTO wms_permission(code,name,domain_code,description,status,permission_type,parent_id,route_path,icon,sort_order)\nSELECT 'patrolPunishment.view','巡线处罚','patrol-punishment','查看巡线处罚、统计与记录',1,1,0,'/features/patrol-punishment/pages/home/index','/static/icons/wms/fwms-patrol-punishment-outline.svg',180\nWHERE NOT EXISTS(SELECT 1 FROM wms_permission WHERE code='patrolPunishment.view')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT INTO wms_permission(code,name,domain_code,description,status,permission_type,parent_id,route_path,icon,sort_order)\nSELECT 'patrolPunishment.create','发起巡线处罚','patrol-punishment','扫码并提交配错货或设箱错误处罚',1,2,p.id,'','',181 FROM wms_permission p WHERE p.code='patrolPunishment.view' AND NOT EXISTS(SELECT 1 FROM wms_permission WHERE code='patrolPunishment.create')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT INTO wms_permission(code,name,domain_code,description,status,permission_type,parent_id,route_path,icon,sort_order)\nSELECT 'patrolPunishment.revoke','撤销巡线处罚','patrol-punishment','撤销本人发起且待确认的处罚',1,2,p.id,'','',182 FROM wms_permission p WHERE p.code='patrolPunishment.view' AND NOT EXISTS(SELECT 1 FROM wms_permission WHERE code='patrolPunishment.revoke')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g CROSS JOIN wms_permission p WHERE g.code='patrol_operator' AND p.code IN('patrolPunishment.view','patrolPunishment.create','patrolPunishment.revoke')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT INTO wms_punish(type,punish_source,duty_user_id,duty_user_role,duty_user_name,punish_role_type,order_sn,date,zone,shelf,zone_shelf,sub_shelf_sn,punish_reason,punish_remark,punish_price,punish_status,pic_url,appeal_status,operator_id,operator_name,last_operator_id,last_operator_name,create_time,data_status,relation_id)\nSELECT 2,0,13,9,'杨晨',10,'PATROL-DEMO-001','2026-09-21','9','117','09-117-2','','09-117-2货架发现配错货','现场复核花材与订单不一致',10,0,'[]',0,12,'郑晓东',12,'郑晓东','2026-09-21 09:18:00',0,90001\nWHERE NOT EXISTS(SELECT 1 FROM wms_punish WHERE order_sn='PATROL-DEMO-001')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT INTO wms_punish(type,punish_source,duty_user_id,duty_user_role,duty_user_name,punish_role_type,order_sn,date,zone,shelf,zone_shelf,sub_shelf_sn,punish_reason,punish_remark,punish_price,punish_status,pic_url,appeal_status,operator_id,operator_name,last_operator_id,last_operator_name,create_time,data_status,relation_id)\nSELECT 1,0,14,10,'李建军',1,'PATROL-DEMO-002','2026-09-21','12','206','12-206-1','','实际箱型与系统设箱不符','已现场拍照核验',10,1,'[]',0,12,'郑晓东',12,'郑晓东','2026-09-21 10:36:00',0,90002\nWHERE NOT EXISTS(SELECT 1 FROM wms_punish WHERE order_sn='PATROL-DEMO-002')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT INTO wms_punish(type,punish_source,duty_user_id,duty_user_role,duty_user_name,punish_role_type,order_sn,date,zone,shelf,zone_shelf,sub_shelf_sn,punish_reason,punish_remark,punish_price,punish_status,pic_url,appeal_status,operator_id,operator_name,last_operator_id,last_operator_name,create_time,data_status,relation_id)\nSELECT 2,0,40,9,'陈宇',10,'PATROL-DEMO-003','2026-09-20','15','088','15-088-1','','配货商品等级与订单不一致','复核后撤销',10,2,'[]',0,12,'郑晓东',12,'郑晓东','2026-09-20 15:42:00',0,90003\nWHERE NOT EXISTS(SELECT 1 FROM wms_punish WHERE order_sn='PATROL-DEMO-003')"
+  },
+  {
+    "file": "20260921_patrol_punishment_domain.sql",
+    "sql": "INSERT INTO wms_punish(type,punish_source,duty_user_id,duty_user_role,duty_user_name,punish_role_type,order_sn,date,zone,shelf,zone_shelf,sub_shelf_sn,punish_reason,punish_remark,punish_price,punish_status,pic_url,appeal_status,operator_id,operator_name,last_operator_id,last_operator_name,create_time,data_status,relation_id)\nSELECT 1,0,14,10,'李建军',1,'PATROL-DEMO-004','2026-09-18','7','031','07-031-3','','包装箱型号选择错误','货架复核记录',20,1,'[]',0,12,'郑晓东',12,'郑晓东','2026-09-18 11:05:00',0,90004\nWHERE NOT EXISTS(SELECT 1 FROM wms_punish WHERE order_sn='PATROL-DEMO-004')"
+  },
+  {
+    "file": "20260921_quality_inspector_accounts.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name,status)\nSELECT seed.login_name,seed.phone,seed.display_name,seed.salt,SHA2(CONCAT(seed.salt,'123456'),256),r.id,'梦花仓管',1\nFROM (\n  SELECT 'quality_zhaochu' login_name,'13810003001' phone,'赵初' display_name,'quality_zhaochu_2026' salt UNION ALL\n  SELECT 'quality_guoyan','13810003002','郭燕','quality_guoyan_2026' UNION ALL\n  SELECT 'quality_ningxia','13810003003','宁潇欣','quality_ningxia_2026' UNION ALL\n  SELECT 'quality_wuzong','13810003004','吴宗兴','quality_wuzong_2026' UNION ALL\n  SELECT 'quality_ninglang','13810003005','宁朗琼','quality_ninglang_2026' UNION ALL\n  SELECT 'quality_ninayuan','13810003006','宁园','quality_ninayuan_2026' UNION ALL\n  SELECT 'quality_sunyi','13810003007','孙一丽','quality_sunyi_2026' UNION ALL\n  SELECT 'quality_zhangjie','13810003008','张洁','quality_zhangjie_2026' UNION ALL\n  SELECT 'quality_shaoming','13810003009','邵明康','quality_shaoming_2026' UNION ALL\n  SELECT 'quality_linxi','13810003010','林芯玉','quality_linxi_2026'\n) seed JOIN wms_role r ON r.code='qualityInspector'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id),warehouse_name=VALUES(warehouse_name),status=1"
+  },
+  {
+    "file": "20260921_quality_inspector_accounts.sql",
+    "sql": "INSERT INTO xm_bulky_inspection_assign_user(user_id,user_name,status,attendance_status,attendance_update_time)\nSELECT a.id,a.display_name,1,IF(MOD(a.id,5)=0,0,1),NOW()\nFROM wms_account a JOIN wms_role r ON r.id=a.role_id\nWHERE a.status=1 AND r.code='qualityInspector'\nON DUPLICATE KEY UPDATE user_name=VALUES(user_name),status=1"
+  },
+  {
+    "file": "20260921_quality_inspector_accounts.sql",
+    "sql": "INSERT IGNORE INTO wms_account_inspection_area(account_id,zone_code)\nSELECT a.id,z.zone_code FROM wms_account a JOIN (\n  SELECT 'quality_zhaochu' login_name,'7' zone_code UNION ALL SELECT 'quality_zhaochu','8' UNION ALL\n  SELECT 'quality_guoyan','1' UNION ALL SELECT 'quality_guoyan','2' UNION ALL\n  SELECT 'quality_ningxia','10' UNION ALL SELECT 'quality_ningxia','12' UNION ALL\n  SELECT 'quality_wuzong','3' UNION ALL\n  SELECT 'quality_ninglang','20' UNION ALL SELECT 'quality_ninglang','24' UNION ALL\n  SELECT 'quality_ninayuan','17' UNION ALL SELECT 'quality_ninayuan','18' UNION ALL\n  SELECT 'quality_sunyi','3' UNION ALL SELECT 'quality_sunyi','4' UNION ALL\n  SELECT 'quality_zhangjie','9' UNION ALL\n  SELECT 'quality_shaoming','15' UNION ALL SELECT 'quality_shaoming','16' UNION ALL\n  SELECT 'quality_linxi','6' UNION ALL SELECT 'quality_linxi','11'\n) z ON z.login_name=a.login_name"
+  },
+  {
+    "file": "20260921_remove_site_admin_workbench_cards.sql",
+    "sql": "UPDATE wms_role\nSET workbench_cards_json = '[]'\nWHERE code = 'siteAdmin'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='周明远' WHERE login_name='demo_qualityInspector'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='韩雪梅' WHERE login_name='demo_qualityLeader'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='罗建国' WHERE login_name='demo_baseAdmissionOfficer'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='蒋文斌' WHERE login_name='demo_warehouseManager'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='陈志强' WHERE login_name='demo_siteAdmin'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='刘海峰' WHERE login_name='demo_regionalManager'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='何建华' WHERE login_name='demo_zoneSupervisor'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='郑晓东' WHERE login_name='demo_patrolInspector'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='杨晨' WHERE login_name='demo_picker'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='李建军' WHERE login_name='demo_packer'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='徐博文' WHERE login_name='demo_logisticsSpecialist'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='马俊' WHERE login_name='demo_driver'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='高志鹏' WHERE login_name='demo_baseRegionLeader'"
+  },
+  {
+    "file": "20260921_rename_demo_account_display_names.sql",
+    "sql": "UPDATE wms_account SET display_name='赵春梅' WHERE login_name='demo_baseStationStaff'"
+  },
+  {
+    "file": "20260921_rename_distribution_staff.sql",
+    "sql": "UPDATE wms_permission SET name='配货权限' WHERE code='distributionStaff.view'"
+  },
+  {
+    "file": "20260921_rename_distribution_staff.sql",
+    "sql": "UPDATE wms_permission_group SET name='配货权限' WHERE code='distribution_staff_management'"
+  },
+  {
+    "file": "20260921_rename_inspection_attendance.sql",
+    "sql": "UPDATE wms_permission SET name='质检假勤' WHERE code='inspectionAttendance.view'"
+  },
+  {
+    "file": "20260921_rename_inspection_attendance.sql",
+    "sql": "UPDATE wms_permission_group SET name='质检假勤' WHERE code='inspection_attendance_management'"
+  },
+  {
+    "file": "20260921_site_admin_arrival_data_cards.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json='[\"admission-overview\",\"quality-overview\",\"quality-result\",\"inventory-overview\",\"inventory-progress\",\"distribution-progress\",\"agency-distribution\",\"arrival-volume\",\"self-pickup\"]'\nWHERE code='siteAdmin' AND status=1"
+  },
+  {
+    "file": "20260921_site_admin_contractor_distribution_card.sql",
+    "sql": "UPDATE wms_role SET data_cards_json=JSON_ARRAY_APPEND(COALESCE(data_cards_json,JSON_ARRAY()),'$','contractor-distribution')\nWHERE code='siteAdmin' AND status=1 AND NOT JSON_CONTAINS(COALESCE(data_cards_json,JSON_ARRAY()),JSON_QUOTE('contractor-distribution'))"
+  },
+  {
+    "file": "20260921_site_admin_quality_business_cards.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json = JSON_ARRAY_APPEND(\n  JSON_ARRAY_APPEND(COALESCE(data_cards_json, JSON_ARRAY()), '$', 'quality-supplier-admission'),\n  '$', 'quality-business-statistics'\n)\nWHERE code = 'siteAdmin'\n  AND status = 1\n  AND NOT JSON_CONTAINS(COALESCE(data_cards_json, JSON_ARRAY()), JSON_QUOTE('quality-supplier-admission'))\n  AND NOT JSON_CONTAINS(COALESCE(data_cards_json, JSON_ARRAY()), JSON_QUOTE('quality-business-statistics'))"
+  },
+  {
+    "file": "20260921_site_admin_quality_business_cards.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json = JSON_ARRAY_APPEND(COALESCE(data_cards_json, JSON_ARRAY()), '$', 'quality-supplier-admission')\nWHERE code = 'siteAdmin' AND status = 1\n  AND NOT JSON_CONTAINS(COALESCE(data_cards_json, JSON_ARRAY()), JSON_QUOTE('quality-supplier-admission'))"
+  },
+  {
+    "file": "20260921_site_admin_quality_business_cards.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json = JSON_ARRAY_APPEND(COALESCE(data_cards_json, JSON_ARRAY()), '$', 'quality-business-statistics')\nWHERE code = 'siteAdmin' AND status = 1\n  AND NOT JSON_CONTAINS(COALESCE(data_cards_json, JSON_ARRAY()), JSON_QUOTE('quality-business-statistics'))"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-warehouse-income-outline.svg' WHERE code='baseOutsourceIncome.view'"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-part-logistics-outline.svg' WHERE code='partLogistics.view'"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-inventory-outline.svg' WHERE code='inventory.view'"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-distribution-permission-outline.svg' WHERE code='distributionStaff.view'"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-inspection-attendance-outline.svg' WHERE code='inspectionAttendance.view'"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-team-account-outline.svg' WHERE code='teamAccount.view'"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-team-picking-outline.svg' WHERE code='teamDistribution.view'"
+  },
+  {
+    "file": "20260921_unique_domain_icons.sql",
+    "sql": "UPDATE wms_permission SET icon='/static/icons/wms/fwms-base-return-outline.svg' WHERE code='baseReturn.view'"
+  },
+  {
+    "file": "20260921_workforce_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(0,'distributionStaff.view','配货权限','distribution-staff',1,'查看配货人员及可配分区','/features/workforce/pages/distribution-staff/index','fwms-account-outline',130,1),\n(0,'inspectionAttendance.view','质检假勤','inspection-attendance',1,'查看质检人员出勤和休息状态','/features/workforce/pages/inspection-attendance/index','fwms-task-outline',131,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),permission_type=1,description=VALUES(description),route_path=VALUES(route_path),icon=VALUES(icon),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260921_workforce_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT id,'distributionStaff.configure','配置配货分区','distribution-staff',2,'单人或批量配置配货员可配分区','','',10,1 FROM wms_permission WHERE code='distributionStaff.view'\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),domain_code=VALUES(domain_code),permission_type=2,description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_workforce_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT id,'inspectionAttendance.update','调整质检假勤','inspection-attendance',2,'将质检人员设为出勤或休息并记录日志','','',10,1 FROM wms_permission WHERE code='inspectionAttendance.view'\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),domain_code=VALUES(domain_code),permission_type=2,description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_workforce_domains.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status) VALUES\n('distribution_staff_management','配货权限','查看配货人员并配置可配分区',1),\n('inspection_attendance_management','质检假勤','查看并调整质检人员假勤',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260921_workforce_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON\n(g.code='distribution_staff_management' AND p.code IN ('distributionStaff.view','distributionStaff.configure')) OR\n(g.code='inspection_attendance_management' AND p.code IN ('inspectionAttendance.view','inspectionAttendance.update'))"
+  },
+  {
+    "file": "20260921_workforce_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g\nWHERE r.code='siteAdmin' AND g.code IN ('distribution_staff_management','inspection_attendance_management')"
+  },
+  {
+    "file": "20260922_add_session_size_statistics_card.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json = JSON_ARRAY_APPEND(\n  COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()),\n  '$',\n  'session-size-statistics'\n)\nWHERE code = 'siteAdmin'\n  AND NOT JSON_CONTAINS(\n    COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()),\n    JSON_QUOTE('session-size-statistics')\n  )"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(0,'agriDelivery.view','农资送货单','agri-delivery',1,'按商品查看农资送货汇总及供应商明细','/features/agri-driver/pages/delivery/index','fwms-agri-delivery-outline',28,1),\n(0,'agriDriverOrder.view','农资订单','agri-driver-order',1,'查看司机组农资订单及配送状态','/features/agri-driver/pages/orders/index','fwms-agri-order-outline',29,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),domain_code=VALUES(domain_code),permission_type=VALUES(permission_type),description=VALUES(description),route_path=VALUES(route_path),icon=VALUES(icon),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT id,'agriDriverOrder.operate','农资订单发货与签收','agri-driver-order',2,'拍照记录农资订单发货及农户签收','','',10,1 FROM wms_permission WHERE code='agriDriverOrder.view'\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),domain_code=VALUES(domain_code),permission_type=2,description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status) VALUES\n('agri_delivery_operator','农资送货单作业','查看农资商品送货汇总和供应商明细',1),\n('agri_driver_order_operator','农资订单配送作业','查看农资订单并执行发货、签收',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code='agriDelivery.view' WHERE g.code='agri_delivery_operator'"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code IN('agriDriverOrder.view','agriDriverOrder.operate') WHERE g.code='agri_driver_order_operator'"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT INTO wms_role(code,name,description,workbench_cards_json,todo_ids_json,scan_operations_json,data_cards_json,status) VALUES\n('driverLeader','司机组长','管理农资送货单，并执行农资订单发货与签收','[]','[]','[]','[]',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code IN('agri_delivery_operator','agri_driver_order_operator') WHERE r.code='driverLeader'"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code IN('agri_delivery_operator','agri_driver_order_operator') WHERE r.code='superAdmin'"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code IN('agriDelivery.view','agriDriverOrder.view','agriDriverOrder.operate') WHERE g.code='super_admin_all'"
+  },
+  {
+    "file": "20260922_agri_driver_domains.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_name,status)\nSELECT 'demo_driverLeader','13990000016','周凯','wms_driverLeader',SHA2('wms_driverLeader123456',256),id,'梦花仓管',1 FROM wms_role WHERE code='driverLeader'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id),warehouse_name=VALUES(warehouse_name),status=1"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES(0,'bulkPurchaseDemand.view','集采需求','bulkPurchaseDemand',1,'查看包花厂集采需求及报价、定采进度','/features/bulk-purchase/pages/demands/index','/static/icons/wms/fwms-bulk-demand-outline.svg',230,1)\nON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id),name=VALUES(name),route_path=VALUES(route_path),icon=VALUES(icon),status=1"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "SET @demand_permission=LAST_INSERT_ID()"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES(0,'bulkPurchaseOrder.view','集采订单','bulkPurchaseOrder',1,'查看定采形成的供货单、签到、盘点与结算进度','/features/bulk-purchase/pages/orders/index','/static/icons/wms/fwms-bulk-order-outline.svg',231,1)\nON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id),name=VALUES(name),route_path=VALUES(route_path),icon=VALUES(icon),status=1"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "SET @order_permission=LAST_INSERT_ID()"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nVALUES('bulk_purchase_demand_viewer','集采需求查看','查看集采需求、报价供应商数量及定采结果',1)\nON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id),name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "SET @demand_group=LAST_INSERT_ID()"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id) VALUES(@demand_group,@demand_permission)"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nVALUES('bulk_purchase_order_viewer','集采订单查看','查看集采供货单、标签、签到、盘点及结算进度',1)\nON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id),name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "SET @order_group=LAST_INSERT_ID()"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id) VALUES(@order_group,@order_permission)"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT id,@demand_group FROM wms_role WHERE code='superAdmin'"
+  },
+  {
+    "file": "20260922_bulk_purchase_domains.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT id,@order_group FROM wms_role WHERE code='superAdmin'"
+  },
+  {
+    "file": "20260922_grant_agri_driver_to_super_admin.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id\nFROM wms_role r\nJOIN wms_permission_group g\n  ON g.code IN('agri_delivery_operator','agri_driver_order_operator')\nWHERE r.code='superAdmin'"
+  },
+  {
+    "file": "20260922_grant_agri_driver_to_super_admin.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p\n  ON p.code IN('agriDelivery.view','agriDriverOrder.view','agriDriverOrder.operate')\nWHERE g.code='super_admin_all'"
+  },
+  {
+    "file": "20260922_super_admin.sql",
+    "sql": "INSERT INTO wms_role(code,name,description,workbench_cards_json,todo_ids_json,scan_operations_json,data_cards_json,status)\nVALUES('superAdmin','超级管理员','系统最高管理账号，可管理全部领域、账户、角色及权限组','[]','[\"admission-pending\",\"quality-pending\",\"inventory-inbound\"]','[\"admission-checkin\",\"quality-inspection\",\"inventory-inbound\",\"inventory-outbound\"]','[\"session-size-statistics\",\"admission-overview\",\"quality-overview\",\"quality-result\",\"quality-supplier-admission\",\"quality-business-statistics\",\"inventory-overview\",\"inventory-progress\",\"distribution-progress\",\"agency-distribution\",\"contractor-distribution\",\"arrival-volume\",\"self-pickup\"]',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),workbench_cards_json=VALUES(workbench_cards_json),todo_ids_json=VALUES(todo_ids_json),scan_operations_json=VALUES(scan_operations_json),data_cards_json=VALUES(data_cards_json),status=1"
+  },
+  {
+    "file": "20260922_super_admin.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status)\nVALUES('super_admin_all','超级管理员全部权限','超级管理员专用，包含当前全部有效权限',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_super_admin.sql",
+    "sql": "SET @super_group=(SELECT id FROM wms_permission_group WHERE code='super_admin_all')"
+  },
+  {
+    "file": "20260922_super_admin.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT @super_group,id FROM wms_permission WHERE status=1"
+  },
+  {
+    "file": "20260922_super_admin.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.status=1 WHERE r.code='superAdmin'"
+  },
+  {
+    "file": "20260922_super_admin.sql",
+    "sql": "SET @admin_salt='wms_super_admin'"
+  },
+  {
+    "file": "20260922_super_admin.sql",
+    "sql": "INSERT INTO wms_account(login_name,phone,display_name,password_salt,password_hash,role_id,warehouse_id,warehouse_name,status)\nSELECT 'admin','13990000000','超级管理员',@admin_salt,SHA2(CONCAT(@admin_salt,'123456'),256),r.id,1,'梦花仓',1 FROM wms_role r WHERE r.code='superAdmin'\nON DUPLICATE KEY UPDATE display_name=VALUES(display_name),role_id=VALUES(role_id),warehouse_id=VALUES(warehouse_id),warehouse_name=VALUES(warehouse_name),status=1"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(0,'systemAccount.view','系统账户','system-account',1,'查看本系统登录账户','/features/system-account/pages/home/index','',190,1),\n(0,'accessControl.view','角色与权限组','access-control',1,'查看角色与权限组','/features/access-control/pages/home/index','',192,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),route_path=VALUES(route_path),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @account_root=(SELECT id FROM wms_permission WHERE code='systemAccount.view')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @access_root=(SELECT id FROM wms_permission WHERE code='accessControl.view')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @quality_root=(SELECT id FROM wms_permission WHERE code='quality.flower.view')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(@account_root,'systemAccount.manage','管理系统账户','system-account',2,'新增、编辑、停用及重置登录账户','','',191,1),\n(@access_root,'accessControl.manage','管理角色与权限组','access-control',2,'维护角色、权限组及权限关联','','',193,1)\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "UPDATE wms_permission SET parent_id=@quality_root,name='供应商入场操作' WHERE code='admission.confirm'"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "UPDATE wms_permission SET parent_id=@quality_root,name='下单补货' WHERE code='restock.submit'"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES(0,'dataCenter.view','数据中心','data-center',1,'数据中心分类与卡片权限','','',200,1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @dc=(SELECT id FROM wms_permission WHERE code='dataCenter.view')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(@dc,'dataCenter.category.core','核心','data-center',3,'核心分类','','',201,1),\n(@dc,'dataCenter.category.quality','质检','data-center',3,'质检分类','','',202,1),\n(@dc,'dataCenter.category.distribution','配货','data-center',3,'配货分类','','',203,1),\n(@dc,'dataCenter.category.arrival','到场货','data-center',3,'到场货分类','','',204,1),\n(@dc,'dataCenter.category.centralProcurement','集采','data-center',3,'集采分类','','',205,1),\n(@dc,'dataCenter.category.packing','打包','data-center',3,'打包分类','','',206,1),\n(@dc,'dataCenter.category.logistics','物流','data-center',3,'物流分类','','',207,1),\n(@dc,'dataCenter.category.supplier','供应商','data-center',3,'供应商分类','','',208,1),\n(@dc,'dataCenter.category.agri','农资','data-center',3,'农资分类','','',209,1)\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @core=(SELECT id FROM wms_permission WHERE code='dataCenter.category.core')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @quality=(SELECT id FROM wms_permission WHERE code='dataCenter.category.quality')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @distribution=(SELECT id FROM wms_permission WHERE code='dataCenter.category.distribution')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "SET @arrival=(SELECT id FROM wms_permission WHERE code='dataCenter.category.arrival')"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(@core,'dataCenter.card.session-size-statistics','场次大小件统计','data-center',4,'当前场次大小件数量','','',220,1),\n(@core,'dataCenter.card.quality-overview','质检完成情况','data-center',4,'当前场次质检完成情况','','',221,1),\n(@core,'dataCenter.card.inventory-progress','入库完成进度','data-center',4,'当前库存入库进度','','',222,1),\n(@quality,'dataCenter.card.quality-supplier-admission','供应商入场','data-center',4,'应入场、已入场和未入场','','',230,1),\n(@quality,'dataCenter.card.quality-business-statistics','质检统计','data-center',4,'质检业务处理统计','','',231,1),\n(@quality,'dataCenter.card.quality-task','质检任务','data-center',4,'质检任务概览','','',232,1),\n(@quality,'dataCenter.card.quality-result','质检结果','data-center',4,'质检结果统计','','',233,1),\n(@quality,'dataCenter.card.quality-issues','待处理问题','data-center',4,'待处理质检问题','','',234,1),\n(@quality,'dataCenter.card.quality-trend','质检趋势','data-center',4,'质检趋势','','',235,1),\n(@quality,'dataCenter.card.quality-staff','当前在岗质检人员','data-center',4,'在岗质检人数','','',236,1),\n(@distribution,'dataCenter.card.distribution-progress','配货进度','data-center',4,'整体配货完成进度','','',240,1),\n(@distribution,'dataCenter.card.agency-distribution','代配货统计','data-center',4,'代配供应商和货量','','',241,1),\n(@distribution,'dataCenter.card.contractor-distribution','配货统计（外包负责人）','data-center',4,'外包负责人配货统计','','',242,1),\n(@distribution,'dataCenter.card.shelf-progress','货架进度','data-center',4,'已完成配货货架数','','',243,1),\n(@distribution,'dataCenter.card.restock-units','待补货量','data-center',4,'当前待补货数量','','',244,1),\n(@arrival,'dataCenter.card.arrival-volume','到场货统计','data-center',4,'销售、收花与晚场构成','','',250,1),\n(@arrival,'dataCenter.card.self-pickup','自提统计','data-center',4,'自提货量和人数','','',251,1),\n(@arrival,'dataCenter.card.arrival-late','迟到供应商','data-center',4,'迟到供应商记录','','',252,1),\n(@arrival,'dataCenter.card.arrival-priority','优先质检','data-center',4,'优先质检供应商','','',253,1)\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),description=VALUES(description),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status) VALUES\n('system_account_admin','系统账户管理员','管理本系统登录账户',1),\n('access_control_admin','角色权限管理员','管理角色、权限组及权限关联',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p\nWHERE (g.code='system_account_admin' AND p.code IN ('systemAccount.view','systemAccount.manage'))\n   OR (g.code='access_control_admin' AND p.code IN ('accessControl.view','accessControl.manage'))"
+  },
+  {
+    "file": "20260922_system_access_management.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g\nWHERE r.code='siteAdmin' AND g.code IN ('system_account_admin','access_control_admin')"
+  },
+  {
+    "file": "20260922_site_and_team_distribution_progress_cards.sql",
+    "sql": "UPDATE wms_permission\nSET name='分区配货进度',description='按当前账号所属配货团队负责分区统计配货进度'\nWHERE code='dataCenter.card.distribution-progress'"
+  },
+  {
+    "file": "20260922_site_and_team_distribution_progress_cards.sql",
+    "sql": "SET @data_center = (SELECT id FROM wms_permission WHERE code='dataCenter.view' LIMIT 1)"
+  },
+  {
+    "file": "20260922_site_and_team_distribution_progress_cards.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nSELECT COALESCE((SELECT parent_id FROM wms_permission WHERE code='dataCenter.card.distribution-progress' LIMIT 1),@data_center),\n       'dataCenter.card.site-distribution-progress','场地配货总进度','data-center',4,\n       '全场地配货扎数及整体完成进度，不受分区数据权限限制','','',239,1\nWHERE NOT EXISTS(SELECT 1 FROM wms_permission WHERE code='dataCenter.card.site-distribution-progress')"
+  },
+  {
+    "file": "20260922_site_and_team_distribution_progress_cards.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code='dataCenter.card.site-distribution-progress'\nWHERE g.code='super_admin_all'"
+  },
+  {
+    "file": "20260922_site_and_team_distribution_progress_cards.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json=JSON_ARRAY_APPEND(COALESCE(data_cards_json,JSON_ARRAY()),'$', 'site-distribution-progress')\nWHERE code IN ('siteAdmin','superAdmin')\n  AND NOT JSON_CONTAINS(COALESCE(data_cards_json,JSON_ARRAY()),JSON_QUOTE('site-distribution-progress'))"
+  },
+  {
+    "file": "20260922_unified_scan_operations.sql",
+    "sql": "UPDATE wms_role SET scan_operations_json = JSON_ARRAY(\n  'admission-checkin','quality-inspection','quality-video','distribution-shelf',\n  'packing-shelf','logistics-shelf','cold-storage-bare','base-return-confirm'\n) WHERE code IN ('superAdmin','siteAdmin')"
+  },
+  {
+    "file": "20260922_unified_scan_operations.sql",
+    "sql": "UPDATE wms_role SET scan_operations_json = JSON_ARRAY(\n  'admission-checkin','quality-inspection','quality-video','base-return-confirm'\n) WHERE code = 'qualityInspector'"
+  },
+  {
+    "file": "20260922_unified_scan_operations.sql",
+    "sql": "UPDATE wms_role SET scan_operations_json = JSON_ARRAY(\n  'quality-inspection','quality-video','base-return-confirm'\n) WHERE code = 'qualityLeader'"
+  },
+  {
+    "file": "20260922_unified_scan_operations.sql",
+    "sql": "UPDATE wms_role SET scan_operations_json = JSON_ARRAY('distribution-shelf')\nWHERE code IN ('picker','partTimePicker')"
+  },
+  {
+    "file": "20260922_unified_scan_operations.sql",
+    "sql": "UPDATE wms_role SET scan_operations_json = JSON_ARRAY('packing-shelf')\nWHERE code = 'packer'"
+  },
+  {
+    "file": "20260922_unified_scan_operations.sql",
+    "sql": "UPDATE wms_role SET scan_operations_json = JSON_ARRAY('logistics-shelf')\nWHERE code = 'logisticsSpecialist'"
+  },
+  {
+    "file": "20260922_unified_scan_operations.sql",
+    "sql": "UPDATE wms_role SET scan_operations_json = JSON_ARRAY('cold-storage-bare')\nWHERE code = 'warehouseManager'"
+  },
+  {
+    "file": "20260923_dispatch_task_domain.sql",
+    "sql": "SET @transport := (SELECT id FROM wms_permission WHERE code='transport.view' LIMIT 1)"
+  },
+  {
+    "file": "20260923_dispatch_task_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(@transport,'transport.dispatch.view','查看派车任务','transport',1,'查看派车任务、车辆、司机和运输路线','/features/transport/pages/dispatch/index','fwms-truck-outline',29,1),\n(@transport,'transport.dispatch.manage','维护派车任务','transport',2,'更新派车任务执行状态','','',30,1)\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),description=VALUES(description),route_path=VALUES(route_path),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20260923_dispatch_task_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code IN ('transport.dispatch.view','transport.dispatch.manage')\nWHERE g.code IN ('transport_dispatcher','super_admin_all')"
+  },
+  {
+    "file": "20260923_dispatch_task_domain.sql",
+    "sql": "INSERT INTO hub_dispatch_order(id,dispatch_no,round_no,type,vehicle_name,plate_no,driver_name,start_station_name,end_station_id,end_station_name,responsible_base_id,responsible_base_name,status,sign_status,operator_name) VALUES\n(4134,'HF1790140868227042','2026-09-23',1,'8.1米','云AQ6106','赵永聪','斗南基地',51,'墩子基地',51,'墩子基地',1,0,'接口导入'),\n(4133,'HF1790140868227041','2026-09-23',1,'8.1米','云AG8583','袁春波','斗南基地',54,'前所基地',54,'前所基地',1,0,'接口导入'),\n(4132,'HF1790140868227040','2026-09-23',1,'8.1米','云AQ7678','李维平','斗南基地',43,'毛家营基地',43,'毛家营基地',1,0,'接口导入'),\n(4131,'HF1790140868227039','2026-09-23',1,'4.2米','云A6E2F6','肖洪','斗南基地',37,'嵩明所基地',37,'嵩明所基地',1,0,'接口导入'),\n(4130,'HF1790140868227038','2026-09-23',1,'8.1米','云AG9449','高清','斗南基地',24,'沈伞营基地',24,'沈伞营基地',1,0,'接口导入'),\n(4129,'HF1790140868227037','2026-09-23',1,'9.6米','云AV3664','廖光兴','斗南基地',24,'沈伞营基地',24,'沈伞营基地',1,0,'接口导入'),\n(4128,'HF1790140868227036','2026-09-23',1,'8.1米','云AQ8511','饶兴奎','斗南基地',22,'石林基地',22,'石林基地',1,0,'接口导入'),\n(4127,'HF1790140868227035','2026-09-23',1,'9.6米','云AF9454','邹秀春','斗南基地',9,'北古城基地',9,'北古城基地',1,0,'接口导入'),\n(4126,'HF1790140868227034','2026-09-23',1,'8.1米','云AR2905','张朝贵','斗南基地',4,'宜良基地',4,'宜良基地',1,0,'接口导入'),\n(4125,'HF1790140868227033','2026-09-23',1,'9.6米','云AQ3950','代兴彩','斗南基地',4,'宜良基地',4,'宜良基地',1,0,'接口导入'),\n(4124,'HF1790140868227032','2026-09-23',1,'4.2米','云A3J21W','张顺发','斗南基地',57,'翠华基地',57,'翠华基地',1,0,'接口导入'),\n(4123,'HF1790140868227031','2026-09-23',1,'4.2米','云AN1R03','陈俊中','斗南基地',56,'中村基地',56,'中村基地',1,0,'接口导入'),\n(4122,'HF1790140868227030','2026-09-23',1,'4.2米','云A3K20R','周喆','斗南基地',42,'高桥基地',42,'高桥基地',1,0,'接口导入'),\n(4121,'HF1790140868227029','2026-09-23',1,'4.2米','云AV7K80','徐文杰','斗南基地',32,'恩路村基地',32,'恩路村基地',1,0,'接口导入'),\n(4120,'HF1790140868227028','2026-09-23',1,'4.2米','云AAT139','胡勇','斗南基地',32,'恩路村基地',32,'恩路村基地',1,0,'接口导入'),\n(4119,'HF1790140868227027','2026-09-23',1,'4.2米','云AJ8W50','王华','斗南基地',31,'禄劝基地',31,'禄劝基地',1,0,'接口导入'),\n(4118,'HF1790140868227026','2026-09-23',1,'4.2米','云A5LL54','杨明辉','斗南基地',30,'王官厂基地',30,'王官厂基地',1,0,'接口导入'),\n(4117,'HF1790140868227025','2026-09-23',1,'4.2米','云AM839D','付宏伟','斗南基地',25,'武定基地',25,'武定基地',1,0,'接口导入'),\n(4116,'HF1790140868227024','2026-09-23',1,'8.1米','云AQ7380','赵安红','斗南基地',16,'九厂基地',16,'九厂基地',1,0,'接口导入'),\n(4115,'HF1790140868227023','2026-09-23',1,'8.1米','云AQ3760','田茂尧','斗南基地',15,'旧街基地',15,'旧街基地',1,0,'接口导入')\nON DUPLICATE KEY UPDATE dispatch_no=VALUES(dispatch_no),round_no=VALUES(round_no),vehicle_name=VALUES(vehicle_name),plate_no=VALUES(plate_no),driver_name=VALUES(driver_name),end_station_id=VALUES(end_station_id),end_station_name=VALUES(end_station_name),responsible_base_id=VALUES(responsible_base_id),responsible_base_name=VALUES(responsible_base_name),status=VALUES(status),sign_status=VALUES(sign_status)"
+  },
+  {
+    "file": "20260923_quality_attendance_data_card.sql",
+    "sql": "UPDATE wms_permission\n   SET name = '质检假勤统计',\n       description = '来自质检假勤模块的人员、出勤和休息数量',\n       status = 1\n WHERE code = 'dataCenter.card.quality-staff'"
+  },
+  {
+    "file": "20260923_quality_attendance_data_card.sql",
+    "sql": "UPDATE wms_role\n   SET data_cards_json = JSON_ARRAY_APPEND(COALESCE(data_cards_json, JSON_ARRAY()), '$', 'quality-staff')\n WHERE code IN ('superAdmin', 'siteAdmin')\n   AND NOT JSON_CONTAINS(COALESCE(data_cards_json, JSON_ARRAY()), JSON_QUOTE('quality-staff'))"
+  },
+  {
+    "file": "20260923_quality_issue_trend_card.sql",
+    "sql": "UPDATE wms_permission\n   SET name='花材问题趋势',\n       description='按问题类型展示最近 7 个真实场次的花材问题数量',\n       status=1\n WHERE code='dataCenter.card.quality-trend'"
+  },
+  {
+    "file": "20260923_quality_issue_trend_card.sql",
+    "sql": "UPDATE wms_role\n   SET data_cards_json=JSON_ARRAY_APPEND(COALESCE(data_cards_json,JSON_ARRAY()),'$','quality-trend')\n WHERE code IN ('superAdmin','siteAdmin')\n   AND NOT JSON_CONTAINS(COALESCE(data_cards_json,JSON_ARRAY()),JSON_QUOTE('quality-trend'))"
+  },
+  {
+    "file": "20260923_quality_team_task_card.sql",
+    "sql": "UPDATE wms_permission\n   SET name = '质检任务统计',\n       description = '按负责的质检团队分区汇总辖区内所有质检人员任务完成情况'\n WHERE code = 'dataCenter.card.quality-task'"
+  },
+  {
+    "file": "20260923_quality_team_task_card.sql",
+    "sql": "UPDATE wms_role\n   SET data_cards_json = JSON_ARRAY_APPEND(\n         COALESCE(data_cards_json, JSON_ARRAY()),\n         '$',\n         'quality-task'\n       )\n WHERE code IN ('superAdmin', 'siteAdmin', 'regionalManager', 'qualityLeader')\n   AND NOT JSON_CONTAINS(COALESCE(data_cards_json, JSON_ARRAY()), JSON_QUOTE('quality-task'))"
+  },
+  {
+    "file": "20260923_remove_legacy_quality_cards.sql",
+    "sql": "UPDATE wms_role\n   SET data_cards_json = JSON_REMOVE(data_cards_json, JSON_UNQUOTE(JSON_SEARCH(data_cards_json, 'one', 'quality-task')))\n WHERE JSON_SEARCH(data_cards_json, 'one', 'quality-task') IS NOT NULL"
+  },
+  {
+    "file": "20260923_remove_legacy_quality_cards.sql",
+    "sql": "UPDATE wms_role\n   SET data_cards_json = JSON_REMOVE(data_cards_json, JSON_UNQUOTE(JSON_SEARCH(data_cards_json, 'one', 'quality-result')))\n WHERE JSON_SEARCH(data_cards_json, 'one', 'quality-result') IS NOT NULL"
+  },
+  {
+    "file": "20260923_remove_legacy_quality_cards.sql",
+    "sql": "UPDATE wms_role\n   SET data_cards_json = JSON_REMOVE(data_cards_json, JSON_UNQUOTE(JSON_SEARCH(data_cards_json, 'one', 'quality-issues')))\n WHERE JSON_SEARCH(data_cards_json, 'one', 'quality-issues') IS NOT NULL"
+  },
+  {
+    "file": "20260923_remove_legacy_quality_cards.sql",
+    "sql": "UPDATE wms_permission\n   SET name = '质检问题统计',\n       description = '降级、退货、缺货、换货及后续处理数量'\n WHERE code = 'dataCenter.card.quality-business-statistics'"
+  },
+  {
+    "file": "20260923_remove_legacy_quality_cards.sql",
+    "sql": "UPDATE wms_permission\n   SET status = 0\n WHERE code IN (\n   'dataCenter.card.quality-task',\n   'dataCenter.card.quality-result',\n   'dataCenter.card.quality-issues'\n )"
+  },
+  {
+    "file": "20260923_site_location_statistics_card.sql",
+    "sql": "SET @data_center = (SELECT id FROM wms_permission WHERE code = 'dataCenter.view' LIMIT 1)"
+  },
+  {
+    "file": "20260923_site_location_statistics_card.sql",
+    "sql": "INSERT INTO wms_permission(parent_id, code, name, domain_code, permission_type, description, route_path, icon, sort_order, status)\nSELECT @data_center, 'dataCenter.card.site-location-statistics', '场地货位统计', 'data-center', 4,\n       '按件型和启用状态统计场地货位，并查看分区分段货位区间', '/pages/data-center/site-locations', '', 241, 1\nWHERE NOT EXISTS (SELECT 1 FROM wms_permission WHERE code = 'dataCenter.card.site-location-statistics')"
+  },
+  {
+    "file": "20260923_site_location_statistics_card.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id, permission_id)\nSELECT g.id, p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code = 'dataCenter.card.site-location-statistics'\nWHERE g.code = 'super_admin_all'"
+  },
+  {
+    "file": "20260923_site_location_statistics_card.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json = JSON_ARRAY_APPEND(COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()), '$', 'site-location-statistics')\nWHERE code IN ('siteAdmin', 'superAdmin')\n  AND NOT JSON_CONTAINS(COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()), JSON_QUOTE('site-location-statistics'))"
+  },
+  {
+    "file": "20260923_vehicle_management_domain.sql",
+    "sql": "INSERT INTO hub_vehicle_type(id,name,status) VALUES (1,'4.2米',1),(3,'8.1米',1),(4,'9.6米',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),status=1"
+  },
+  {
+    "file": "20260923_vehicle_management_domain.sql",
+    "sql": "INSERT INTO hub_vehicle(id,vehicle_no,plate_no,type_id,type_name,load_standard,fuel_consumption,owner_user_id,owner_name,status,tracking_device_no,online_status,acc_status,acc_status_update_time,last_acc_on_time)\nVALUES\n(38,'38号车','云AQ2H60',1,'4.2米',48,13.60,203241,'赵发磊',1,'016073084385',1,0,'2026-09-23 14:14:10','2026-09-23 14:05:30'),\n(39,'39号车','云A3J21W',1,'4.2米',48,15.55,200192,'张顺发',1,'016073084384',1,1,'2026-09-23 14:15:33','2026-09-23 14:03:26'),\n(40,'40号车','云AN62A8',1,'4.2米',48,13.50,200310,'李树华',1,'016073084383',1,0,'2026-09-23 14:15:33','2026-09-23 14:05:09'),\n(41,'41号车','云A6E2F6',1,'4.2米',48,14.30,200989,'肖洪',1,'016073084428',0,0,'2026-09-23 14:11:40','2026-09-23 14:04:49'),\n(42,'42号车','云A8D92S',1,'4.2米',48,14.50,201985,'李少伟',1,'016073084427',1,0,'2026-09-23 14:13:22','2026-09-23 14:03:42'),\n(43,'43号车','云AM839D',1,'4.2米',48,14.50,200282,'付宏伟',1,'016073084422',1,0,'2026-09-23 14:14:52','2026-09-23 14:07:03'),\n(44,'44号车','云A6K7H8',1,'4.2米',48,14.50,202500,'李春',1,'016073084424',1,1,'2026-09-23 14:15:31','2026-09-23 14:15:31'),\n(45,'46号车','云AF9454',4,'9.6米',0,17.90,202718,'邹秀明',1,'016073084397',0,0,'2026-09-23 14:06:49','2026-09-23 14:01:24'),\n(46,'47号车','云AV3664',4,'9.6米',0,19.50,200194,'廖光兴',1,'016073084401',1,1,'2026-09-23 14:15:28','2026-09-23 14:14:05'),\n(47,'48号车','云AG9449',3,'8.1米',0,19.40,200320,'高帅',1,'016073084419',1,0,'2026-09-23 13:58:22','2026-09-22 22:03:51')\nON DUPLICATE KEY UPDATE vehicle_no=VALUES(vehicle_no),plate_no=VALUES(plate_no),type_id=VALUES(type_id),type_name=VALUES(type_name),load_standard=VALUES(load_standard),fuel_consumption=VALUES(fuel_consumption),owner_user_id=VALUES(owner_user_id),owner_name=VALUES(owner_name),status=VALUES(status),tracking_device_no=VALUES(tracking_device_no),online_status=VALUES(online_status),acc_status=VALUES(acc_status),acc_status_update_time=VALUES(acc_status_update_time),last_acc_on_time=VALUES(last_acc_on_time)"
+  },
+  {
+    "file": "20260923_vehicle_management_domain.sql",
+    "sql": "SET @transport=(SELECT id FROM wms_permission WHERE code='transport.view' LIMIT 1)"
+  },
+  {
+    "file": "20260923_vehicle_management_domain.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status)\nVALUES\n(@transport,'transport.vehicle.view','查看车辆管理','transport',1,'查看车辆档案、在线状态与设备状态','/features/transport/pages/vehicles/index','fwms-truck-outline',31,1),\n(@transport,'transport.vehicle.manage','维护车辆档案','transport',2,'新增、编辑车辆及维护可用状态','','',32,1)\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),description=VALUES(description),route_path=VALUES(route_path),icon=VALUES(icon),status=1"
+  },
+  {
+    "file": "20260923_vehicle_management_domain.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id FROM wms_permission_group g JOIN wms_permission p ON p.code IN ('transport.vehicle.view','transport.vehicle.manage')\nWHERE g.code IN ('transport_dispatcher','super_admin_all')"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "SET @admission := (SELECT id FROM wms_permission WHERE code='admission.view' LIMIT 1)"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "SET @quality := (SELECT id FROM wms_permission WHERE code='quality.flower.view' LIMIT 1)"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "SET @transport := (SELECT id FROM wms_permission WHERE code='transport.view' LIMIT 1)"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(COALESCE(@admission,0),'arrivalGoods.view','到场货管理','arrival-goods',1,'查看到场货收购、库存、出库、自提和无标签花材','/features/arrival-goods/pages/home/index','fwms-warehouse-outline',33,1),\n(COALESCE(@admission,0),'arrivalGoods.outbound','到场货出库','arrival-goods',2,'维护到场货商品出库业务动作','','',34,1),\n(COALESCE(@quality,0),'quality.baseStatistics.view','基地质检统计','quality-base-statistics',1,'查看基地维度降级、退货、换货及问题数量统计','/features/quality/pages/base-statistics/index','fwms-inspection-outline',35,1),\n(COALESCE(@quality,0),'quality.exchange.view','换货记录','quality-base-statistics',2,'查看质检换货记录和电话通知状态','','',36,1),\n(COALESCE(@transport,0),'transport.baseFlower.view','基地花材明细','transport',1,'查看司机组长和司机责任基地的花材明细、货量和盘点数据','/features/transport/pages/base-flowers/index','fwms-truck-outline',37,1)\nON DUPLICATE KEY UPDATE\n  parent_id=VALUES(parent_id),\n  name=VALUES(name),\n  domain_code=VALUES(domain_code),\n  permission_type=VALUES(permission_type),\n  description=VALUES(description),\n  route_path=VALUES(route_path),\n  icon=VALUES(icon),\n  sort_order=VALUES(sort_order),\n  status=1"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT INTO wms_permission_group(code,name,description,status) VALUES\n('arrival_goods_operator','到场货管理','查看到场货收购、库存、出库、自提和无标签花材',1),\n('quality_base_statistics_viewer','基地质检统计','查看基地问题统计、换货记录和电话通知状态',1),\n('transport_base_flower_viewer','基地花材明细','查看责任基地花材明细、货量和盘点数据',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code IN('arrivalGoods.view','arrivalGoods.outbound')\nWHERE g.code='arrival_goods_operator'"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code IN('quality.baseStatistics.view','quality.exchange.view')\nWHERE g.code='quality_base_statistics_viewer'"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code='transport.baseFlower.view'\nWHERE g.code='transport_base_flower_viewer'"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT INTO wms_role(code,name,description,workbench_cards_json,todo_ids_json,scan_operations_json,data_cards_json,status) VALUES\n('arrivalGoodsManager','到场货管理员','负责到场货收购、库存列表、商品出库、场地自提和无标签花材管理','[]','[]','[]','[]',1),\n('driverLeader','司机组长','围绕车辆管理和派车任务进行调度，并查看责任基地花材明细','[]','[]','[]','[]',1)\nON DUPLICATE KEY UPDATE name=VALUES(name),description=VALUES(description),status=1"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code='arrival_goods_operator'\nWHERE r.code IN('superAdmin','siteAdmin','arrivalGoodsManager')"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code='quality_base_statistics_viewer'\nWHERE r.code IN('superAdmin','siteAdmin','qualityLeader','qualityInspector')"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_role_permission_group(role_id,group_id)\nSELECT r.id,g.id FROM wms_role r JOIN wms_permission_group g ON g.code='transport_base_flower_viewer'\nWHERE r.code IN('superAdmin','siteAdmin','driverLeader','driver')"
+  },
+  {
+    "file": "20261008_arrival_transport_quality_permissions.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code IN('arrivalGoods.view','arrivalGoods.outbound','quality.baseStatistics.view','quality.exchange.view','transport.baseFlower.view')\nWHERE g.code='super_admin_all'"
+  },
+  {
+    "file": "20261008_split_arrival_quality_entries.sql",
+    "sql": "SET @arrival_parent := (SELECT id FROM wms_permission WHERE code='arrivalGoods.view' LIMIT 1)"
+  },
+  {
+    "file": "20261008_split_arrival_quality_entries.sql",
+    "sql": "SET @quality_parent := (SELECT id FROM wms_permission WHERE code='quality.baseStatistics.view' LIMIT 1)"
+  },
+  {
+    "file": "20261008_split_arrival_quality_entries.sql",
+    "sql": "SET @transport_parent := (SELECT id FROM wms_permission WHERE code='transport.view' LIMIT 1)"
+  },
+  {
+    "file": "20261008_split_arrival_quality_entries.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(COALESCE(@arrival_parent,0),'arrivalGoods.purchase.view','收购管理','arrival-goods',1,'查看到场货收购/到场记录','/features/arrival-goods/pages/purchase/index','fwms-warehouse-outline',33,1),\n(COALESCE(@arrival_parent,0),'arrivalGoods.stock.view','库存列表','arrival-goods',1,'查看到场货可用库存列表','/features/arrival-goods/pages/stock/index','fwms-inventory-outline',34,1),\n(COALESCE(@arrival_parent,0),'arrivalGoods.outbound.view','商品出库','arrival-goods',1,'查看到场货商品出库记录','/features/arrival-goods/pages/outbound/index','fwms-outbound-outline',35,1),\n(COALESCE(@arrival_parent,0),'arrivalGoods.selfPickup.view','场地自提','arrival-goods',1,'查看到场货场地自提记录','/features/arrival-goods/pages/self-pickup/index','fwms-checkin-outline',36,1),\n(COALESCE(@arrival_parent,0),'arrivalGoods.unlabeled.view','无标签花材','arrival-goods',1,'查看无标签花材记录','/features/arrival-goods/pages/unlabeled/index','fwms-warehouse-outline',37,1),\n(COALESCE(@quality_parent,0),'quality.exchange.view','换货记录','quality-exchange',1,'查看质检换货记录和电话通知状态','/features/quality/pages/exchange-records/index','fwms-task-outline',38,1),\n(COALESCE(@transport_parent,0),'transport.baseFlower.view','基地花材明细','transport',1,'查看司机组长和司机责任基地的花材明细、货量和盘点数据','/features/transport/pages/base-flowers/index','fwms-truck-outline',39,1)\nON DUPLICATE KEY UPDATE\n  parent_id=VALUES(parent_id),\n  name=VALUES(name),\n  domain_code=VALUES(domain_code),\n  permission_type=VALUES(permission_type),\n  description=VALUES(description),\n  route_path=VALUES(route_path),\n  icon=VALUES(icon),\n  sort_order=VALUES(sort_order),\n  status=1"
+  },
+  {
+    "file": "20261008_split_arrival_quality_entries.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code IN(\n  'arrivalGoods.purchase.view',\n  'arrivalGoods.stock.view',\n  'arrivalGoods.outbound.view',\n  'arrivalGoods.selfPickup.view',\n  'arrivalGoods.unlabeled.view'\n)\nWHERE g.code IN('arrival_goods_operator','super_admin_all')"
+  },
+  {
+    "file": "20261008_split_arrival_quality_entries.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code IN('quality.baseStatistics.view','quality.exchange.view')\nWHERE g.code IN('quality_base_statistics_viewer','super_admin_all')"
+  },
+  {
+    "file": "20261008_split_arrival_quality_entries.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code='transport.baseFlower.view'\nWHERE g.code IN('transport_base_flower_viewer','super_admin_all')"
+  },
+  {
+    "file": "20261009_demo_message_punishments.sql",
+    "sql": "INSERT INTO wms_punish (\n  type,punish_source,duty_user_id,duty_user_role,duty_user_name,punish_role_type,\n  order_sn,date,zone,shelf,zone_shelf,sub_shelf_sn,shelf_detail,\n  punish_reason,punish_remark,punish_price,punish_status,\n  appeal_status,appeal_count,appeal_content,\n  operator_id,operator_name,last_operator_id,last_operator_name,\n  create_time,update_time,data_status\n)\nSELECT 2,2,a.id,0,a.display_name,1,\n  'MSG-PUNISH-2026100901','2026-10-09','三区','015','三区-015','三区-015-1','三区 015 货架',\n  '巡线发现三区 015 货架存在配货错误，已生成处罚记录。','消息中心处罚通知联动生成',30.00,0,\n  0,0,'',\n  a.id,'系统',a.id,'系统',\n  '2026-10-09 09:15:00','2026-10-09 09:15:00',0\nFROM wms_account a\nWHERE a.login_name='admin'\n  AND NOT EXISTS (SELECT 1 FROM wms_punish p WHERE p.order_sn='MSG-PUNISH-2026100901')"
+  },
+  {
+    "file": "20261009_demo_message_punishments.sql",
+    "sql": "INSERT INTO wms_punish (\n  type,punish_source,duty_user_id,duty_user_role,duty_user_name,punish_role_type,\n  order_sn,date,zone,shelf,zone_shelf,sub_shelf_sn,shelf_detail,\n  punish_reason,punish_remark,punish_price,punish_status,\n  appeal_status,appeal_count,appeal_content,\n  operator_id,operator_name,last_operator_id,last_operator_name,\n  create_time,update_time,data_status\n)\nSELECT 2,2,a.id,0,a.display_name,1,\n  'MSG-PUNISH-2026100902','2026-10-09','四区','028','四区-028','四区-028-2','四区 028 货架',\n  '处罚单已由巡察员撤销，原处罚金额不再计入结算。','消息中心处罚撤销联动生成',20.00,2,\n  0,0,'',\n  a.id,'系统',a.id,'系统',\n  '2026-10-09 10:20:00','2026-10-09 10:20:00',0\nFROM wms_account a\nWHERE a.login_name='admin'\n  AND NOT EXISTS (SELECT 1 FROM wms_punish p WHERE p.order_sn='MSG-PUNISH-2026100902')"
+  },
+  {
+    "file": "20261009_demo_message_punishments.sql",
+    "sql": "INSERT INTO wms_punish (\n  type,punish_source,duty_user_id,duty_user_role,duty_user_name,punish_role_type,\n  order_sn,date,zone,shelf,zone_shelf,sub_shelf_sn,shelf_detail,\n  punish_reason,punish_remark,punish_price,punish_status,\n  appeal_status,appeal_count,appeal_content,\n  operator_id,operator_name,last_operator_id,last_operator_name,\n  create_time,update_time,data_status\n)\nSELECT 1,2,a.id,0,a.display_name,1,\n  'MSG-PUNISH-2026100903','2026-10-09','五区','006','五区-006','五区-006-1','五区 006 货架',\n  '提交的处罚申诉已审核通过，相关处罚记录已解除。','消息中心申诉通过联动生成',15.00,2,\n  2,1,'已提交申诉并审核通过',\n  a.id,'系统',a.id,'系统',\n  '2026-10-09 11:05:00','2026-10-09 11:05:00',0\nFROM wms_account a\nWHERE a.login_name='admin'\n  AND NOT EXISTS (SELECT 1 FROM wms_punish p WHERE p.order_sn='MSG-PUNISH-2026100903')"
+  },
+  {
+    "file": "20261009_demo_message_punishments.sql",
+    "sql": "UPDATE logistics_message\nSET biz_type=21,biz_id=(SELECT id FROM wms_punish WHERE order_sn='MSG-PUNISH-2026100901' LIMIT 1)\nWHERE id=111"
+  },
+  {
+    "file": "20261009_demo_message_punishments.sql",
+    "sql": "UPDATE logistics_message\nSET biz_type=21,biz_id=(SELECT id FROM wms_punish WHERE order_sn='MSG-PUNISH-2026100902' LIMIT 1)\nWHERE id=112"
+  },
+  {
+    "file": "20261009_demo_message_punishments.sql",
+    "sql": "UPDATE logistics_message\nSET biz_type=21,biz_id=(SELECT id FROM wms_punish WHERE order_sn='MSG-PUNISH-2026100903' LIMIT 1)\nWHERE id=113"
+  },
+  {
+    "file": "20261009_demo_punishment_messages.sql",
+    "sql": "INSERT INTO logistics_message\n  (msg_type,target_type,carrier_id,provider_id,biz_type,biz_id,title,content,creator_account_type,creator_account_id,creator_name,create_time,update_time,data_status)\nVALUES\n  (21,0,0,0,21,2026100901,'处罚通知','巡线发现 三区 015 货架存在配货错误，已生成处罚记录，请相关责任人及时查看并处理。',1,0,'系统',NOW() - INTERVAL 12 MINUTE,NOW() - INTERVAL 12 MINUTE,0),\n  (22,0,0,0,22,2026100902,'处罚撤销','处罚单 P20261009002 已由巡察员撤销，原处罚金额不再计入结算。',1,0,'系统',NOW() - INTERVAL 8 MINUTE,NOW() - INTERVAL 8 MINUTE,0),\n  (23,0,0,0,23,2026100903,'处罚申诉通过','你提交的处罚申诉已审核通过，相关处罚记录已解除，请关注后续结算结果。',1,0,'系统',NOW() - INTERVAL 3 MINUTE,NOW() - INTERVAL 3 MINUTE,0)"
+  },
+  {
+    "file": "20261009_logistics_data_center_cards.sql",
+    "sql": "SET @logistics_category = (SELECT id FROM wms_permission WHERE code='dataCenter.category.logistics')"
+  },
+  {
+    "file": "20261009_logistics_data_center_cards.sql",
+    "sql": "INSERT INTO wms_permission(parent_id,code,name,domain_code,permission_type,description,route_path,icon,sort_order,status) VALUES\n(@logistics_category,'dataCenter.card.logistics-outbound-collection','出库与揽收','data-center',4,'当前场次物流包裹打包、出库和揽收汇总','','',260,1),\n(@logistics_category,'dataCenter.card.logistics-collection-progress','物流揽收进度','data-center',4,'按物流班次展示当前场次包裹揽收完成进度','','',261,1)\nON DUPLICATE KEY UPDATE parent_id=VALUES(parent_id),name=VALUES(name),description=VALUES(description),sort_order=VALUES(sort_order),status=1"
+  },
+  {
+    "file": "20261009_logistics_data_center_cards.sql",
+    "sql": "INSERT IGNORE INTO wms_permission_group_item(group_id,permission_id)\nSELECT g.id,p.id\nFROM wms_permission_group g\nJOIN wms_permission p ON p.code IN (\n  'dataCenter.card.logistics-outbound-collection',\n  'dataCenter.card.logistics-collection-progress'\n)\nWHERE g.code IN ('logistics_operator','logistics_management','super_admin_all')"
+  },
+  {
+    "file": "20261009_logistics_data_center_cards.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json = JSON_ARRAY_APPEND(COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()), '$', 'logistics-outbound-collection')\nWHERE code IN ('superAdmin','siteAdmin','logisticsSpecialist')\n  AND status=1\n  AND NOT JSON_CONTAINS(COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()), JSON_QUOTE('logistics-outbound-collection'))"
+  },
+  {
+    "file": "20261009_logistics_data_center_cards.sql",
+    "sql": "UPDATE wms_role\nSET data_cards_json = JSON_ARRAY_APPEND(COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()), '$', 'logistics-collection-progress')\nWHERE code IN ('superAdmin','siteAdmin','logisticsSpecialist')\n  AND status=1\n  AND NOT JSON_CONTAINS(COALESCE(NULLIF(data_cards_json, ''), JSON_ARRAY()), JSON_QUOTE('logistics-collection-progress'))"
+  }
+]

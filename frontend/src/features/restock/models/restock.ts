@@ -1,0 +1,5 @@
+export interface RestockDemand { key:string;productName:string;rank:number;skuConfig:string;zone:string;shortageNeed:number;returnNeed:number;siteNeed:number;needNum:number;submittedNum:number;completedNum:number;pendingNum:number;enterItemIds:number[] }
+export interface RestockPreviewItem { key:string;productName:string;rank:number;skuConfig:string;zone:string;needNum:number;enterItemIds:number[];inventoryList:Array<{productId:number;rank:number;available:number;price:number}> }
+export interface RestockSubmitPreview { serialNo:number;items:RestockPreviewItem[] }
+export interface RestockPlan { id:number;serialNo:number;planSn:string;status:number;totalNeedNum:number;allocatedNum:number;prepareNum:number;insufficientVarietyCount:number;insufficientTotalNum:number;varietyCount:number;zones:string[];submitterName:string;createTime:string;updateTime:string }
+export interface RestockPlanItem { productName:string;rank:number;skuConfig:string;zone:string;needNum:number;allocatedNum:number;prepareNum:number }

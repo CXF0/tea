@@ -1,0 +1,10 @@
+{
+  "name": "梦花仓管",
+  "appid": "__UNI__MENGHUACANGGUAN",
+  "description": "梦花仓库管理端",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "h5": { "router": { "mode": "hash" } },
+  "mp-weixin": { "appid": "", "setting": { "urlCheck": false }, "usingComponents": true }
+}

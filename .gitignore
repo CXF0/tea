@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+*.log
+.idea/
+.vscode/
+frontend/unpackage/
+backend/coverage/
+work/
+
+backend/data/
+backend/uploads/
+backend/.env.original-local

@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-14",
+  "timezone": "Asia/Shanghai",
+  "node": "24.19.0",
+  "database": "SQLite 3.53.3",
+  "typecheck": "passed",
+  "build": "passed (H5 and backend)",
+  "integration_tests": {
+    "passed": 9,
+    "failed": 0,
+    "skipped": 0,
+    "read_endpoints": 85
+  },
+  "browser": {
+    "viewport": "390x844",
+    "login": "passed",
+    "screenshots": 8,
+    "errors": [],
+    "failedResponses": []
+  },
+  "installation_repeatability": "passed; existing data preserved",
+  "server_restart": "passed; SQLite health and login verified",
+  "public_deployment": false
+}
